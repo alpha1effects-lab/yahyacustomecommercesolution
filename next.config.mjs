@@ -1,8 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  turbopack: {
-    root: '../',
-  },
+  output: "standalone", 
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'images.unsplash.com' },
