@@ -106,9 +106,9 @@ export const Header: React.FC = () => {
             <Image
               src="/site-logo.svg"
               alt="Store"
-              width={240}
-              height={60}
-              className="h-14 w-auto"
+              width={200}
+              height={50}
+              className="h-11 w-auto"
               priority
             />
           </Link>

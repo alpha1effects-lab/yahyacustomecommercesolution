@@ -64,26 +64,24 @@ export default async function BrandDetailPage({ params }: { params: Promise<{ sl
   return (
     <div className="max-w-[1440px] mx-auto px-6 py-12">
       {/* Brand Header */}
-      <div className="mb-12 flex flex-col sm:flex-row items-start sm:items-center gap-6">
+      <div className="mb-12">
         {serializedBrand.logo && (
-          <div className="w-24 h-24 border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-black flex items-center justify-center flex-shrink-0">
+          <div className="mb-6">
             <img
               src={serializedBrand.logo}
               alt={`${serializedBrand.name} logo`}
-              className="max-w-[80%] max-h-[80%] object-contain"
+              className="max-h-24 w-auto object-contain"
             />
           </div>
         )}
-        <div>
-          <h1 className="text-4xl font-medium tracking-tight text-black dark:text-white">
-            {serializedBrand.name}
-          </h1>
-          {serializedBrand.description && (
-            <p className="mt-2 text-sm text-black dark:text-gray-400 max-w-2xl">
-              {serializedBrand.description}
-            </p>
-          )}
-        </div>
+        <h1 className="text-3xl md:text-5xl font-medium tracking-tight text-black dark:text-white mb-4">
+          {serializedBrand.name}
+        </h1>
+        {serializedBrand.description && (
+          <p className="text-base md:text-lg text-black dark:text-gray-300 leading-relaxed max-w-4xl">
+            {serializedBrand.description}
+          </p>
+        )}
       </div>
 
       {/* Products */}

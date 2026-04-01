@@ -24,7 +24,8 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
   title = 'Products',
 }) => {
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState<string>('all');
+  const [priceMin, setPriceMin] = useState<string>('');
+  const [priceMax, setPriceMax] = useState<string>('');
   const [sortBy, setSortBy] = useState<string>(initialSort);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
   const { addToCart } = useCart();
@@ -51,13 +52,10 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
       filtered = filtered.filter(p => selectedBrands.includes(p.brand?.name || 'Unbranded'));
     }
 
-    if (priceRange === 'under5k') {
-      filtered = filtered.filter(p => p.price < 5000);
-    } else if (priceRange === '5k-10k') {
-      filtered = filtered.filter(p => p.price >= 5000 && p.price <= 10000);
-    } else if (priceRange === 'over10k') {
-      filtered = filtered.filter(p => p.price > 10000);
-    }
+    const min = priceMin !== '' ? parseFloat(priceMin) : null;
+    const max = priceMax !== '' ? parseFloat(priceMax) : null;
+    if (min !== null && !isNaN(min)) filtered = filtered.filter(p => p.price >= min);
+    if (max !== null && !isNaN(max)) filtered = filtered.filter(p => p.price <= max);
 
     if (sortBy === 'low-high') {
       filtered.sort((a, b) => a.price - b.price);
@@ -68,7 +66,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
     }
 
     return filtered;
-  }, [products, selectedBrands, priceRange, sortBy, forcedVendor]);
+  }, [products, selectedBrands, priceMin, priceMax, sortBy, forcedVendor]);
 
   return (
     <div className="max-w-[1440px] mx-auto px-6 py-12">
@@ -130,26 +128,36 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
           <div>
             <h3 className="text-sm font-bold uppercase tracking-widest mb-4 text-black dark:text-white">Price</h3>
             <div className="space-y-3">
-              {[
-                { label: 'All', value: 'all' },
-                { label: `Under ${formatPrice(5000)}`, value: 'under5k' },
-                { label: `${formatPrice(5000)} - ${formatPrice(10000)}`, value: '5k-10k' },
-                { label: `Over ${formatPrice(10000)}`, value: 'over10k' },
-              ].map(option => (
-                <label key={option.value} className="flex items-center gap-3 cursor-pointer group">
-                  <div className={`w-4 h-4 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center transition-colors ${priceRange === option.value ? 'border-black dark:border-white' : 'group-hover:border-black dark:group-hover:border-white'}`}>
-                    {priceRange === option.value && <div className="w-2 h-2 rounded-full bg-black dark:bg-white" />}
-                  </div>
-                  <input 
-                    type="radio" 
-                    name="price"
-                    className="hidden"
-                    checked={priceRange === option.value}
-                    onChange={() => setPriceRange(option.value)}
-                  />
-                  <span className="text-sm text-black dark:text-gray-400 group-hover:text-black dark:group-hover:text-white transition-colors">{option.label}</span>
-                </label>
-              ))}
+              <div>
+                <label className="text-xs text-text-secondary dark:text-gray-400 uppercase tracking-widest mb-1 block">Min</label>
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="Min price"
+                  value={priceMin}
+                  onChange={(e) => setPriceMin(e.target.value)}
+                  className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-black text-black dark:text-white px-3 py-2 text-sm focus:border-black dark:focus:border-white outline-none"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-text-secondary dark:text-gray-400 uppercase tracking-widest mb-1 block">Max</label>
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="Max price"
+                  value={priceMax}
+                  onChange={(e) => setPriceMax(e.target.value)}
+                  className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-black text-black dark:text-white px-3 py-2 text-sm focus:border-black dark:focus:border-white outline-none"
+                />
+              </div>
+              {(priceMin !== '' || priceMax !== '') && (
+                <button
+                  onClick={() => { setPriceMin(''); setPriceMax(''); }}
+                  className="text-xs text-text-secondary dark:text-gray-400 underline underline-offset-2 hover:text-black dark:hover:text-white transition-colors"
+                >
+                  Clear price filter
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -206,7 +214,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
             <div className="text-center py-20 text-black dark:text-gray-500">
               <p>No products match your selected filters.</p>
               <button 
-                onClick={() => { setSelectedBrands([]); setPriceRange('all'); }}
+                onClick={() => { setSelectedBrands([]); setPriceMin(''); setPriceMax(''); }}
                 className="mt-4 text-black dark:text-white underline underline-offset-4"
               >
                 Clear all filters
@@ -248,24 +256,37 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
 
             <div>
               <h3 className="text-sm font-bold uppercase tracking-widest mb-4">Price</h3>
-              <div className="space-y-3">
-                {[
-                  { label: 'All', value: 'all' },
-                  { label: `Under ${formatPrice(5000)}`, value: 'under5k' },
-                  { label: `${formatPrice(5000)} - ${formatPrice(10000)}`, value: '5k-10k' },
-                  { label: `Over ${formatPrice(10000)}`, value: 'over10k' },
-                ].map(option => (
-                  <label key={option.value} className="flex items-center gap-3 cursor-pointer">
-                    <input 
-                      type="radio" 
-                      name="mobile-price"
-                      className="w-4 h-4 border-gray-300 text-black focus:ring-black"
-                      checked={priceRange === option.value}
-                      onChange={() => setPriceRange(option.value)}
-                    />
-                    <span className="text-sm text-black dark:text-gray-400">{option.label}</span>
-                  </label>
-                ))}
+              <div className="space-y-4">
+                <div>
+                  <label className="text-xs text-gray-400 uppercase tracking-widest mb-1 block">Min</label>
+                  <input
+                    type="number"
+                    min="0"
+                    placeholder="Min price"
+                    value={priceMin}
+                    onChange={(e) => setPriceMin(e.target.value)}
+                    className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-black text-black dark:text-white px-3 py-2 text-sm outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-gray-400 uppercase tracking-widest mb-1 block">Max</label>
+                  <input
+                    type="number"
+                    min="0"
+                    placeholder="Max price"
+                    value={priceMax}
+                    onChange={(e) => setPriceMax(e.target.value)}
+                    className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-black text-black dark:text-white px-3 py-2 text-sm outline-none"
+                  />
+                </div>
+                {(priceMin !== '' || priceMax !== '') && (
+                  <button
+                    onClick={() => { setPriceMin(''); setPriceMax(''); }}
+                    className="text-xs text-gray-400 underline underline-offset-2 hover:text-black dark:hover:text-white transition-colors"
+                  >
+                    Clear price filter
+                  </button>
+                )}
               </div>
             </div>
           </div>

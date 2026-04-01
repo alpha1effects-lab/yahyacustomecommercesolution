@@ -19,9 +19,9 @@ const isProductPath = (segments: string[]) => segments[0] === 'product' && segme
 const mapSegmentLabel = (segment: string) => {
   const map: Record<string, string> = {
     shop: 'Shop',
-    offers: 'Offers',
-    new: 'New Offers',
-    best: 'Best Offers',
+    offers: 'Shop',
+    new: 'Browse New Offers',
+    best: 'Our Best Offers',
     love: "Products You'll Love",
     accessories: 'Accessories',
     track: 'Track Order',
@@ -30,6 +30,11 @@ const mapSegmentLabel = (segment: string) => {
     search: 'Search Results',
   };
   return map[segment] || formatLabel(segment);
+};
+
+const mapSegmentHref = (segment: string, builtPath: string): string => {
+  if (segment === 'offers') return '/shop';
+  return `/${builtPath}`;
 };
 
 const buildItemsFromPath = (pathname: string): BreadcrumbItem[] => {
@@ -52,7 +57,7 @@ const buildItemsFromPath = (pathname: string): BreadcrumbItem[] => {
     pathParts.push(segment);
     items.push({
       label: mapSegmentLabel(segment),
-      href: `/${pathParts.join('/')}`,
+      href: mapSegmentHref(segment, pathParts.join('/')),
     });
   });
 

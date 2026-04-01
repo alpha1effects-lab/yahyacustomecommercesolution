@@ -129,8 +129,8 @@ export const Footer: React.FC = () => {
           {columns.map((column, index) => (
             <div key={`${column.title}-${index}`} className="space-y-6">
               {column.image && (
-                <div className="w-32 h-20 bg-gray-100 dark:bg-neutral-800 overflow-hidden">
-                  <img src={column.image} alt="" className="w-full h-full object-cover" />
+                <div className="overflow-hidden">
+                  <img src={column.image} alt="" className="max-h-16 w-auto max-w-full object-contain" />
                 </div>
               )}
               {column.title && (
