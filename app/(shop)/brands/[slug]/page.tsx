@@ -79,7 +79,7 @@ export default async function BrandDetailPage({ params }: { params: Promise<{ sl
             {serializedBrand.name}
           </h1>
           {serializedBrand.description && (
-            <p className="mt-2 text-sm text-text-secondary dark:text-gray-400 max-w-2xl">
+            <p className="mt-2 text-sm text-black dark:text-gray-400 max-w-2xl">
               {serializedBrand.description}
             </p>
           )}
@@ -94,7 +94,7 @@ export default async function BrandDetailPage({ params }: { params: Promise<{ sl
         />
       ) : (
         <div className="border border-gray-200 dark:border-gray-800 bg-white dark:bg-neutral-900 p-12 text-center">
-          <p className="text-sm text-text-secondary dark:text-gray-400">
+          <p className="text-sm text-black dark:text-gray-400">
             No products available from {serializedBrand.name} yet.
           </p>
         </div>

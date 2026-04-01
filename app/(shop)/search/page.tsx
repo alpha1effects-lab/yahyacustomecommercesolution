@@ -48,13 +48,13 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     <div className="min-h-screen bg-white dark:bg-black">
       <div className="max-w-[1440px] mx-auto px-6 pt-12 pb-8">
         <h1 className="text-3xl font-bold text-black dark:text-white">Search Results</h1>
-        <p className="text-sm text-text-secondary dark:text-gray-400 mt-2">
+        <p className="text-sm text-black dark:text-gray-400 mt-2">
           {query ? `Showing results for "${query}"` : 'Showing all products'}
         </p>
       </div>
       {safeProducts.length > 0 && <ProductGrid title="" products={safeProducts} />}
       {safeProducts.length === 0 && (
-        <div className="max-w-[1440px] mx-auto px-6 pb-20 text-text-secondary dark:text-gray-400">
+        <div className="max-w-[1440px] mx-auto px-6 pb-20 text-black dark:text-gray-400">
           No products found.
         </div>
       )}

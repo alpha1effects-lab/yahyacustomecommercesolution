@@ -92,7 +92,7 @@ export const Breadcrumbs: React.FC<{ items?: BreadcrumbItem[] }> = ({ items }) =
   return (
     <div className="max-w-[1440px] mx-auto px-6 pt-5 pb-4">
       <nav aria-label="Breadcrumb">
-        <ol className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-widest text-text-secondary dark:text-gray-400">
+        <ol className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-widest text-black dark:text-gray-400">
           {trail.map((item, index) => {
             const isLast = index === trail.length - 1;
             return (

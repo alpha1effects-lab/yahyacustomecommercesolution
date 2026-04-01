@@ -381,7 +381,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
         <form className="max-h-[75vh] overflow-y-auto">
           <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Product Name</label>
+              <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Product Name</label>
               <input
                 type="text"
                 name="name"
@@ -392,7 +392,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
               />
             </div>
             <div>
-              <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">SKU</label>
+              <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">SKU</label>
               <input
                 type="text"
                 name="sku"
@@ -403,7 +403,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
               />
             </div>
             <div>
-              <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Price (PKR)</label>
+              <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Price (PKR)</label>
               <input
                 type="number"
                 name="price"
@@ -413,7 +413,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
               />
             </div>
             <div>
-              <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Original Price (PKR)</label>
+              <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Original Price (PKR)</label>
               <input
                 type="number"
                 name="originalPrice"
@@ -423,7 +423,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
               />
             </div>
             <div>
-              <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Stock</label>
+              <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Stock</label>
               <input
                 type="number"
                 name="stock"
@@ -433,7 +433,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
               />
             </div>
             <div>
-              <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Category</label>
+              <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Category</label>
               <select
                 name="categoryId"
                 value={formData.categoryId}
@@ -464,7 +464,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
               </div>
             </div>
             <div>
-              <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Brand</label>
+              <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Brand</label>
               <select
                 name="brandId"
                 value={formData.brandId}
@@ -478,23 +478,49 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
               </select>
             </div>
             <div className="md:col-span-2">
-              <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Additional Categories</label>
-              <div className="mt-2 grid grid-cols-2 md:grid-cols-3 gap-2 text-xs">
-                {localCategories.map(category => (
-                  <label key={`multi-${category._id}`} className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={selectedCategoryIds.includes(category._id)}
-                      onChange={() => toggleCategoryId(category._id)}
-                    />
-                    <span>{category.name}</span>
-                  </label>
+              <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Additional Categories</label>
+              <select
+                value=""
+                onChange={(e) => {
+                  if (e.target.value && !selectedCategoryIds.includes(e.target.value)) {
+                    toggleCategoryId(e.target.value);
+                  }
+                  e.target.value = '';
+                }}
+                className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-black text-black dark:text-white px-3 py-3 text-sm focus:border-black dark:focus:border-white outline-none mt-2"
+              >
+                <option value="">Select a category to add</option>
+                {localCategories.filter(c => !selectedCategoryIds.includes(c._id)).map(category => (
+                  <option key={`add-${category._id}`} value={category._id}>{category.name}</option>
                 ))}
-              </div>
+              </select>
+              {selectedCategoryIds.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {selectedCategoryIds.map(id => {
+                    const cat = localCategories.find(c => c._id === id);
+                    if (!cat) return null;
+                    return (
+                      <span
+                        key={`tag-${id}`}
+                        className="inline-flex items-center gap-1.5 bg-gray-100 dark:bg-neutral-800 border border-gray-300 dark:border-gray-600 text-black dark:text-white text-xs px-3 py-1.5 rounded-full"
+                      >
+                        {cat.name}
+                        <button
+                          type="button"
+                          onClick={() => toggleCategoryId(id)}
+                          className="hover:text-red-500 transition-colors"
+                        >
+                          <X size={14} />
+                        </button>
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             <div className="md:col-span-2">
-              <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Carousel Image (optional)</label>
+              <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Carousel Image (optional)</label>
               <div className="flex flex-col gap-3">
                 <label className="flex items-center gap-2 border border-dashed border-gray-300 dark:border-gray-700 p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors">
                   <Upload size={16} />
@@ -517,11 +543,11 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
                     </button>
                   </div>
                 )}
-                {carouselUploading && <p className="text-xs text-text-secondary">Uploading...</p>}
+                {carouselUploading && <p className="text-xs text-black">Uploading...</p>}
               </div>
             </div>
             <div className="md:col-span-2">
-              <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Description</label>
+              <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Description</label>
               <div className="mt-2 grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <div className="border border-gray-300 dark:border-gray-700 bg-white dark:bg-black text-black dark:text-white">
                   <QuillEditor
@@ -535,14 +561,14 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
                   />
                 </div>
                 <div className="border border-gray-300 dark:border-gray-700 bg-white dark:bg-black min-h-[170px]">
-                  <div className="px-3 py-2 border-b border-gray-200 dark:border-gray-800 text-[11px] font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">
+                  <div className="px-3 py-2 border-b border-gray-200 dark:border-gray-800 text-[11px] font-bold uppercase tracking-widest text-black dark:text-gray-400">
                     Live Preview
                   </div>
                   <div className="p-3 text-sm text-black dark:text-white max-h-[280px] overflow-y-auto rich-text">
                     {formData.description.trim() ? (
                       <div dangerouslySetInnerHTML={{ __html: formData.description }} />
                     ) : (
-                      <p className="text-text-secondary dark:text-gray-500">Description preview will appear here as you type.</p>
+                      <p className="text-black dark:text-gray-500">Description preview will appear here as you type.</p>
                     )}
                   </div>
                 </div>
@@ -554,7 +580,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
             <div className="space-y-4">
               <h4 className="font-bold text-sm uppercase tracking-widest text-black dark:text-white">Media</h4>
               <div>
-                <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Images (max 7)</label>
+                <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Images (max 7)</label>
                 <label className="flex items-center gap-2 border border-dashed border-gray-300 dark:border-gray-700 p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors">
                   <Upload size={16} /> <span className="text-sm">Upload images</span>
                   <input type="file" multiple accept="image/*" className="hidden" onChange={handleImageSelect} />
@@ -578,7 +604,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
               {/* Image Alt Texts */}
               {existingImages.length > 0 && (
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Image Alt Texts</label>
+                  <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Image Alt Texts</label>
                   <div className="space-y-2 mt-2">
                     {existingImages.map((_, index) => (
                       <input

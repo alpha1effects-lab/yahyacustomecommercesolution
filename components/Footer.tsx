@@ -101,7 +101,7 @@ export const Footer: React.FC = () => {
       <div className="max-w-[1440px] mx-auto px-6">
         {topLinks.length > 0 && (
           <div className="mb-12">
-            <div className="flex flex-wrap gap-6 text-xs uppercase tracking-widest text-text-secondary dark:text-gray-400">
+            <div className="flex flex-wrap gap-6 text-xs uppercase tracking-widest text-black dark:text-gray-400">
               {topLinks.map((link, index) => (
                 <Link
                   key={`${link.label}-${index}`}
@@ -139,12 +139,12 @@ export const Footer: React.FC = () => {
                 </h3>
               )}
               {column.description && (
-                <p className="text-sm text-text-secondary dark:text-gray-400 leading-relaxed max-w-xs">
+                <p className="text-sm text-black dark:text-gray-400 leading-relaxed max-w-xs">
                   {column.description}
                 </p>
               )}
               {(column.links || []).length > 0 && (
-                <ul className="space-y-4 text-sm text-text-secondary dark:text-gray-400">
+                <ul className="space-y-4 text-sm text-black dark:text-gray-400">
                   {(column.links || []).map((link, linkIndex) => (
                     <li key={`${link.label}-${linkIndex}`}>
                       <Link href={link.href || '#'} className="hover:text-black dark:hover:text-white transition-colors">
@@ -161,7 +161,7 @@ export const Footer: React.FC = () => {
                     placeholder={column.newsletterPlaceholder || 'Enter your email'}
                     className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-black dark:text-white p-3 pr-10 text-sm focus:outline-none focus:border-black dark:focus:border-white transition-colors rounded-none placeholder:text-gray-400"
                   />
-                  <button className="absolute right-3 top-1/2 transform -translate-y-1/2 text-black dark:text-white hover:text-text-secondary dark:hover:text-gray-300">
+                  <button className="absolute right-3 top-1/2 transform -translate-y-1/2 text-black dark:text-white hover:text-black dark:hover:text-gray-300">
                     {column.newsletterButtonLabel ? (
                       <span className="text-xs uppercase tracking-widest">{column.newsletterButtonLabel}</span>
                     ) : (
@@ -181,7 +181,7 @@ export const Footer: React.FC = () => {
               <Link
                 key={item.key}
                 href={item.href as string}
-                className="text-black dark:text-white hover:text-text-secondary dark:hover:text-gray-400"
+                className="text-black dark:text-white hover:text-black dark:hover:text-gray-400"
                 target={item.href?.startsWith('http') ? '_blank' : undefined}
                 rel={item.href?.startsWith('http') ? 'noreferrer' : undefined}
               >
@@ -190,7 +190,7 @@ export const Footer: React.FC = () => {
             ))}
           </div>
           
-          <div className="flex flex-col md:flex-row items-center gap-4 text-xs text-text-secondary dark:text-gray-500">
+          <div className="flex flex-col md:flex-row items-center gap-4 text-xs text-black dark:text-gray-500">
            
             <span>&copy; {new Date().getFullYear()} Inno Bricks. All rights reserved.</span>
             

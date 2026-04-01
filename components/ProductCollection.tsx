@@ -75,7 +75,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
         <div>
           {!hideTitle && <h1 className="text-4xl font-medium tracking-tight mb-2 text-black dark:text-white">{title}</h1>}
-          <p className="text-text-secondary dark:text-gray-400 text-sm">Showing {filteredProducts.length} results</p>
+          <p className="text-black dark:text-gray-400 text-sm">Showing {filteredProducts.length} results</p>
         </div>
         
         <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
@@ -97,7 +97,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
               <option value="low-high" className="text-black">Price: Low to High</option>
               <option value="high-low" className="text-black">Price: High to Low</option>
             </select>
-            <ChevronDown size={14} className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none text-text-secondary" />
+            <ChevronDown size={14} className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none text-black" />
           </div>
         </div>
       </div>
@@ -120,7 +120,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
                       checked={selectedBrands.includes(brand)}
                       onChange={() => toggleBrand(brand)}
                     />
-                    <span className="text-sm text-text-secondary dark:text-gray-400 group-hover:text-black dark:group-hover:text-white transition-colors">{brand}</span>
+                    <span className="text-sm text-black dark:text-gray-400 group-hover:text-black dark:group-hover:text-white transition-colors">{brand}</span>
                   </label>
                 ))}
               </div>
@@ -147,7 +147,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
                     checked={priceRange === option.value}
                     onChange={() => setPriceRange(option.value)}
                   />
-                  <span className="text-sm text-text-secondary dark:text-gray-400 group-hover:text-black dark:group-hover:text-white transition-colors">{option.label}</span>
+                  <span className="text-sm text-black dark:text-gray-400 group-hover:text-black dark:group-hover:text-white transition-colors">{option.label}</span>
                 </label>
               ))}
             </div>
@@ -191,7 +191,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
                   <h3 className="text-base font-medium text-black dark:text-white group-hover:underline underline-offset-4 decoration-1">
                     {product.name}
                   </h3>
-                  <p className="text-xs uppercase tracking-widest text-text-secondary dark:text-gray-400">
+                  <p className="text-xs uppercase tracking-widest text-black dark:text-gray-400">
                     {product.brand?.name || 'Unbranded'}
                   </p>
                   <p className="text-sm text-black dark:text-white pt-1">
@@ -203,7 +203,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
           </div>
           
           {filteredProducts.length === 0 && (
-            <div className="text-center py-20 text-text-secondary dark:text-gray-500">
+            <div className="text-center py-20 text-black dark:text-gray-500">
               <p>No products match your selected filters.</p>
               <button 
                 onClick={() => { setSelectedBrands([]); setPriceRange('all'); }}
@@ -239,7 +239,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
                         checked={selectedBrands.includes(brand)}
                         onChange={() => toggleBrand(brand)}
                       />
-                      <span className="text-sm text-text-secondary dark:text-gray-400">{brand}</span>
+                      <span className="text-sm text-black dark:text-gray-400">{brand}</span>
                     </label>
                   ))}
                 </div>
@@ -263,7 +263,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
                       checked={priceRange === option.value}
                       onChange={() => setPriceRange(option.value)}
                     />
-                    <span className="text-sm text-text-secondary dark:text-gray-400">{option.label}</span>
+                    <span className="text-sm text-black dark:text-gray-400">{option.label}</span>
                   </label>
                 ))}
               </div>

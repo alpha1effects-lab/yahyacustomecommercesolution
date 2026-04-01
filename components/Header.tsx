@@ -74,9 +74,9 @@ export const Header: React.FC = () => {
             <Image
               src="/site-logo.svg"
               alt="Store"
-              width={144}
-              height={36}
-              className="h-8 w-auto"
+              width={180}
+              height={45}
+              className="h-10 w-auto"
               priority
             />
           </Link>
@@ -106,16 +106,16 @@ export const Header: React.FC = () => {
             <Image
               src="/site-logo.svg"
               alt="Store"
-              width={200}
-              height={50}
-              className="h-10 w-auto"
+              width={240}
+              height={60}
+              className="h-14 w-auto"
               priority
             />
           </Link>
         </div>
 
         {/* Desktop Mega Menu */}
-        <nav className="hidden md:flex items-center justify-center gap-10 text-xs font-semibold uppercase tracking-[0.2em] text-text-secondary dark:text-gray-400 flex-1">
+        <nav className="hidden md:flex items-center justify-center gap-10 text-xs font-semibold uppercase tracking-[0.2em] text-black dark:text-gray-400 flex-1">
           {orderedMegaMenu.map((item) => (
             <div key={item.label} className="relative group">
               <Link href={item.href || '#'} className="hover:text-black dark:hover:text-white transition-colors">
@@ -148,7 +148,7 @@ export const Header: React.FC = () => {
                             <Link
                               key={`${link.label}-${link.href}`}
                               href={link.href}
-                              className="text-[11px] uppercase tracking-[0.18em] text-text-secondary dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
+                              className="text-[11px] uppercase tracking-[0.18em] text-black dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
                             >
                               {link.label}
                             </Link>
@@ -166,7 +166,7 @@ export const Header: React.FC = () => {
         {/* Icons Right */}
         <div className="hidden md:flex items-center gap-5 text-black dark:text-white">
           <button 
-            className="hover:text-text-secondary dark:hover:text-gray-400 transition-colors"
+            className="hover:text-black dark:hover:text-gray-400 transition-colors"
             onClick={() => setIsSearchOpen(true)}
             title="Search"
           >
@@ -181,7 +181,7 @@ export const Header: React.FC = () => {
             {currency}
           </button>
           <button 
-            className="hover:text-text-secondary dark:hover:text-gray-400 transition-colors"
+            className="hover:text-black dark:hover:text-gray-400 transition-colors"
             onClick={toggleTheme}
             title="Toggle Theme"
           >
@@ -200,7 +200,7 @@ export const Header: React.FC = () => {
             <div className="relative">
               <button
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
-                className="hover:text-text-secondary dark:hover:text-gray-400 transition-colors"
+                className="hover:text-black dark:hover:text-gray-400 transition-colors"
                 title="Account"
               >
                 <User size={20} strokeWidth={1.5} />
@@ -250,7 +250,7 @@ export const Header: React.FC = () => {
             </Link>
           )}
           <button 
-            className="relative hover:text-text-secondary dark:hover:text-gray-400 transition-colors"
+            className="relative hover:text-black dark:hover:text-gray-400 transition-colors"
             onClick={() => setIsCartOpen(true)}
             title="Cart"
           >
@@ -295,7 +295,7 @@ export const Header: React.FC = () => {
                           </div>
                         )}
                         {column.title && (
-                          <div className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">
+                          <div className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">
                             {column.title}
                           </div>
                         )}

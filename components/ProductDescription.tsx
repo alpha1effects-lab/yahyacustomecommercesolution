@@ -12,11 +12,11 @@ const ProductDescription: React.FC<ProductDescriptionProps> = ({ description, pr
 
   return (
     <section className="max-w-[1440px] mx-auto px-6 py-12">
-      <h2 className="text-xl font-bold tracking-[0.15em] uppercase text-black dark:text-white mb-8">
+      <h2 className="text-2xl md:text-3xl font-bold tracking-[0.15em] uppercase text-black dark:text-white mb-8">
         About {productName}
       </h2>
       <div
-        className="rich-text text-text-secondary dark:text-gray-400 max-w-4xl leading-relaxed"
+        className="rich-text text-black dark:text-gray-200 max-w-4xl leading-relaxed text-base md:text-lg overflow-hidden break-words"
         dangerouslySetInnerHTML={{ __html: description }}
       />
     </section>

@@ -67,7 +67,7 @@ export const Hero: React.FC<HeroProps> = ({ heroImage, heroSlides, heroSlideInte
               </h1>
             )}
             {subheadline && (
-              <p className="text-text-secondary dark:text-gray-300 text-lg mb-8 max-w-md">
+              <p className="text-black dark:text-gray-300 text-lg mb-8 max-w-md">
                 {subheadline}
               </p>
             )}

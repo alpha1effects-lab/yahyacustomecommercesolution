@@ -34,13 +34,13 @@ export const ProductHighlight: React.FC<ProductHighlightProps> = ({ product }) =
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24 items-start">
         
         {/* Left: Image Gallery */}
-        <div className="flex flex-col-reverse md:flex-row gap-4 sticky top-24">
-          <div className="hidden md:flex flex-col gap-4">
+        <div className="flex flex-col-reverse md:flex-row gap-4 md:sticky md:top-24">
+          <div className="flex md:flex-col gap-4 overflow-x-auto md:overflow-x-visible">
             {images.map((img, idx) => (
               <button 
                 key={idx}
                 onClick={() => setSelectedImage(idx)}
-                className={`w-20 h-20 bg-gray-100 dark:bg-neutral-800 border ${selectedImage === idx ? 'border-black dark:border-white' : 'border-transparent'} hover:border-gray-400 dark:hover:border-gray-500 transition-all`}
+                className={`w-16 h-16 md:w-20 md:h-20 flex-shrink-0 bg-gray-100 dark:bg-neutral-800 border ${selectedImage === idx ? 'border-black dark:border-white' : 'border-transparent'} hover:border-gray-400 dark:hover:border-gray-500 transition-all`}
               >
                 <img src={img} alt={product.imageAlts?.[idx] || product.name} className="w-full h-full object-cover mix-blend-multiply" />
               </button>
@@ -62,7 +62,7 @@ export const ProductHighlight: React.FC<ProductHighlightProps> = ({ product }) =
 
         {/* Right: Product Details */}
         <div className="flex flex-col pt-4">
-          <span className="text-xs font-bold tracking-widest uppercase text-text-secondary dark:text-gray-400 mb-3">
+          <span className="text-sm md:text-xs font-bold tracking-widest uppercase text-black dark:text-gray-400 mb-3">
             {product.brand?.name || 'Unbranded'}
           </span>
           
@@ -71,9 +71,9 @@ export const ProductHighlight: React.FC<ProductHighlightProps> = ({ product }) =
           </h2>
 
           <div className="flex items-center gap-4 mb-8">
-            <span className="text-xl font-medium text-black dark:text-white">{formatPrice(product.price)}</span>
+            <span className="text-2xl md:text-xl font-medium text-black dark:text-white">{formatPrice(product.price)}</span>
             {product.originalPrice && product.originalPrice > product.price && (
-              <span className="text-sm text-text-secondary dark:text-gray-400 line-through">
+              <span className="text-sm text-black dark:text-gray-400 line-through">
                 {formatPrice(product.originalPrice)}
               </span>
             )}
@@ -81,7 +81,7 @@ export const ProductHighlight: React.FC<ProductHighlightProps> = ({ product }) =
 
           <div className="space-y-6">
             <div className="space-y-3">
-              <label className="text-xs uppercase tracking-widest text-text-secondary dark:text-gray-400">Quantity</label>
+              <label className="text-xs uppercase tracking-widest text-black dark:text-gray-400">Quantity</label>
               <QuantitySelector 
                 quantity={quantity} 
                 onIncrease={() => setQuantity(q => q + 1)} 
@@ -109,7 +109,7 @@ export const ProductHighlight: React.FC<ProductHighlightProps> = ({ product }) =
               </Button>
             </div>
             
-            <p className="text-xs text-center text-text-secondary dark:text-gray-500 pt-4">
+            <p className="text-xs text-center text-black dark:text-gray-500 pt-4">
               Free shipping on orders over $150. 30-day returns.
             </p>
           </div>

@@ -65,13 +65,13 @@ export const SeoFieldsEditor: React.FC<SeoFieldsEditorProps> = ({
   const effectiveJsonLd = values.jsonLd || defaultJsonLd || '';
 
   const inputCls = 'w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-neutral-900 p-2 text-sm';
-  const labelCls = 'block text-xs uppercase tracking-widest text-text-secondary mb-1';
+  const labelCls = 'block text-xs uppercase tracking-widest text-black mb-1';
 
   return (
     <div className="space-y-6">
       {/* SERP Preview */}
       <div>
-        <label className="block text-xs uppercase tracking-widest text-text-secondary mb-2">
+        <label className="block text-xs uppercase tracking-widest text-black mb-2">
           Google Search Preview
         </label>
         <div className="border border-gray-200 dark:border-gray-700 rounded p-4 bg-white dark:bg-neutral-900">
@@ -84,8 +84,8 @@ export const SeoFieldsEditor: React.FC<SeoFieldsEditorProps> = ({
       {/* Meta Title */}
       <div>
         <div className="flex items-center justify-between mb-1">
-          <label className="text-xs uppercase tracking-widest text-text-secondary">Meta Title</label>
-          <span className={`text-xs ${metaTitleLen > 70 ? 'text-red-500' : 'text-text-secondary'}`}>
+          <label className="text-xs uppercase tracking-widest text-black">Meta Title</label>
+          <span className={`text-xs ${metaTitleLen > 70 ? 'text-red-500' : 'text-black'}`}>
             {metaTitleLen}/70
           </span>
         </div>
@@ -100,8 +100,8 @@ export const SeoFieldsEditor: React.FC<SeoFieldsEditorProps> = ({
       {/* Meta Description */}
       <div>
         <div className="flex items-center justify-between mb-1">
-          <label className="text-xs uppercase tracking-widest text-text-secondary">Meta Description</label>
-          <span className={`text-xs ${metaDescLen > 160 ? 'text-red-500' : 'text-text-secondary'}`}>
+          <label className="text-xs uppercase tracking-widest text-black">Meta Description</label>
+          <span className={`text-xs ${metaDescLen > 160 ? 'text-red-500' : 'text-black'}`}>
             {metaDescLen}/160
           </span>
         </div>
@@ -123,7 +123,7 @@ export const SeoFieldsEditor: React.FC<SeoFieldsEditorProps> = ({
           onChange={(e) => update('metaKeywords', e.target.value)}
           placeholder="keyword1, keyword2, keyword3"
         />
-        <p className="text-xs text-text-secondary mt-1">Comma-separated keywords</p>
+        <p className="text-xs text-black mt-1">Comma-separated keywords</p>
       </div>
 
       {/* Canonical URL */}
@@ -139,7 +139,7 @@ export const SeoFieldsEditor: React.FC<SeoFieldsEditorProps> = ({
 
       {/* Robots */}
       <div>
-        <label className="block text-xs uppercase tracking-widest text-text-secondary mb-2">Robots Directive</label>
+        <label className="block text-xs uppercase tracking-widest text-black mb-2">Robots Directive</label>
         <div className="flex items-center gap-6">
           <label className="flex items-center gap-2 text-sm cursor-pointer">
             <input
@@ -244,7 +244,7 @@ export const SeoFieldsEditor: React.FC<SeoFieldsEditorProps> = ({
           onChange={(e) => update('jsonLd', e.target.value)}
           placeholder='{"@context": "https://schema.org", ...}'
         />
-        <p className="text-xs text-text-secondary mt-1">
+        <p className="text-xs text-black mt-1">
           Custom JSON-LD structured data. Leave empty to use auto-generated schema.
         </p>
       </div>

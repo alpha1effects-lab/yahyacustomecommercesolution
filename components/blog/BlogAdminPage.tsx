@@ -51,7 +51,7 @@ export const BlogAdminPage: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
         <div>
           <h1 className="text-2xl font-bold uppercase tracking-widest">Blog</h1>
-          <p className="text-sm text-text-secondary">Manage posts for the storefront blog.</p>
+          <p className="text-sm text-black">Manage posts for the storefront blog.</p>
         </div>
         <div className="flex flex-wrap gap-3">
           <Link href="/admin/blog/categories">
@@ -73,16 +73,16 @@ export const BlogAdminPage: React.FC = () => {
       </div>
 
       <div className="border border-gray-200">
-        <div className="grid grid-cols-5 gap-4 p-4 text-xs uppercase tracking-widest text-text-secondary border-b border-gray-200">
+        <div className="grid grid-cols-5 gap-4 p-4 text-xs uppercase tracking-widest text-black border-b border-gray-200">
           <span>Title</span>
           <span>Status</span>
           <span>Category</span>
           <span>Created</span>
           <span>Updated</span>
         </div>
-        {isLoading && <div className="p-6 text-sm text-text-secondary">Loading...</div>}
+        {isLoading && <div className="p-6 text-sm text-black">Loading...</div>}
         {!isLoading && filteredPosts.length === 0 && (
-          <div className="p-6 text-sm text-text-secondary">No posts found.</div>
+          <div className="p-6 text-sm text-black">No posts found.</div>
         )}
         {!isLoading &&
           filteredPosts.map((post) => {

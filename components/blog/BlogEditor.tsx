@@ -379,7 +379,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ postId }) => {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
         <div>
           <h1 className="text-2xl font-bold uppercase tracking-widest">{postId ? 'Edit Post' : 'New Post'}</h1>
-          <p className="text-sm text-text-secondary">Keep it simple and publish when ready.</p>
+          <p className="text-sm text-black">Keep it simple and publish when ready.</p>
         </div>
         <div className="flex gap-3">
           <Button variant="outline" onClick={() => handleSave('draft')} disabled={isSaving}>
@@ -396,7 +396,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ postId }) => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-6">
           <div>
-            <label className="text-xs uppercase tracking-widest text-text-secondary">
+            <label className="text-xs uppercase tracking-widest text-black">
               Title <span className="text-red-600">*</span>
             </label>
             <input
@@ -408,7 +408,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ postId }) => {
           </div>
 
           <div>
-            <label className="text-xs uppercase tracking-widest text-text-secondary">
+            <label className="text-xs uppercase tracking-widest text-black">
               Slug <span className="text-red-600">*</span>
             </label>
             <input
@@ -423,7 +423,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ postId }) => {
           </div>
 
           <div>
-            <label className="text-xs uppercase tracking-widest text-text-secondary">Excerpt</label>
+            <label className="text-xs uppercase tracking-widest text-black">Excerpt</label>
             <textarea
               className="w-full border border-gray-300 p-3 mt-2 min-h-[120px]"
               value={form.excerpt}
@@ -433,7 +433,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ postId }) => {
           </div>
 
           <div>
-            <label className="text-xs uppercase tracking-widest text-text-secondary">
+            <label className="text-xs uppercase tracking-widest text-black">
               Content <span className="text-red-600">*</span>
             </label>
             <div className="mt-2 grid grid-cols-1 xl:grid-cols-2 gap-4">
@@ -441,14 +441,14 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ postId }) => {
                 <div ref={quillContainerRef} />
               </div>
               <div className="border border-gray-300 dark:border-gray-700 bg-white dark:bg-black min-h-[300px]">
-                <div className="px-3 py-2 border-b border-gray-200 dark:border-gray-800 text-[11px] font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">
+                <div className="px-3 py-2 border-b border-gray-200 dark:border-gray-800 text-[11px] font-bold uppercase tracking-widest text-black dark:text-gray-400">
                   Live Preview
                 </div>
                 <div className="p-4 text-sm text-black dark:text-white max-h-[600px] overflow-y-auto rich-text">
                   {form.content.trim() ? (
                     <div dangerouslySetInnerHTML={{ __html: form.content }} />
                   ) : (
-                    <p className="text-text-secondary dark:text-gray-500">Content preview will appear here as you type.</p>
+                    <p className="text-black dark:text-gray-500">Content preview will appear here as you type.</p>
                   )}
                 </div>
               </div>
@@ -458,7 +458,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ postId }) => {
 
         <div className="space-y-6">
           <div>
-            <label className="text-xs uppercase tracking-widest text-text-secondary">
+            <label className="text-xs uppercase tracking-widest text-black">
               Category <span className="text-red-600">*</span>
             </label>
             <select
@@ -476,7 +476,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ postId }) => {
             </select>
             {form.category === CREATE_CATEGORY_VALUE && (
               <div className="mt-3 border border-gray-200 p-3">
-                <label className="text-xs uppercase tracking-widest text-text-secondary">
+                <label className="text-xs uppercase tracking-widest text-black">
                   New Category Name <span className="text-red-600">*</span>
                 </label>
                 <div className="mt-2 flex gap-2">
@@ -518,7 +518,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ postId }) => {
           </div>
 
           <div>
-            <label className="text-xs uppercase tracking-widest text-text-secondary">Tags</label>
+            <label className="text-xs uppercase tracking-widest text-black">Tags</label>
             <div className="mt-2 space-y-2">
               <div className="flex gap-2">
                 <input
@@ -547,7 +547,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ postId }) => {
           </div>
 
           <div>
-            <label className="text-xs uppercase tracking-widest text-text-secondary">Featured Image</label>
+            <label className="text-xs uppercase tracking-widest text-black">Featured Image</label>
             <input
               type="file"
               accept="image/*"
@@ -563,7 +563,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ postId }) => {
           </div>
 
           <div>
-            <label className="text-xs uppercase tracking-widest text-text-secondary">SEO Meta Title</label>
+            <label className="text-xs uppercase tracking-widest text-black">SEO Meta Title</label>
             <input
               className="w-full border border-gray-300 p-3 mt-2"
               value={form.metaTitle}
@@ -573,7 +573,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ postId }) => {
           </div>
 
           <div>
-            <label className="text-xs uppercase tracking-widest text-text-secondary">SEO Meta Description</label>
+            <label className="text-xs uppercase tracking-widest text-black">SEO Meta Description</label>
             <textarea
               className="w-full border border-gray-300 p-3 mt-2 min-h-[120px]"
               value={form.metaDescription}
@@ -583,7 +583,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ postId }) => {
           </div>
 
           <div>
-            <label className="text-xs uppercase tracking-widest text-text-secondary">Open Graph Image</label>
+            <label className="text-xs uppercase tracking-widest text-black">Open Graph Image</label>
             <input
               type="file"
               accept="image/*"

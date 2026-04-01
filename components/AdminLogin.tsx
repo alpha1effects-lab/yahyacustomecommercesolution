@@ -40,7 +40,7 @@ export const AdminLogin: React.FC = () => {
             <ShieldAlert size={24} />
           </div>
           <h1 className="text-3xl font-bold tracking-widest uppercase mb-2 text-black dark:text-white">Root Admin</h1>
-          <p className="text-text-secondary dark:text-gray-400 text-sm">Platform Management Access</p>
+          <p className="text-black dark:text-gray-400 text-sm">Platform Management Access</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">

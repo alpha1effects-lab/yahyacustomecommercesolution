@@ -58,7 +58,7 @@ export default async function HomePage() {
   }
 
   // Fetch brands for "Shop via Brands" section
-  const brandsRaw = await Brand.find({ isActive: true }).sort({ displayOrder: 1, name: 1 }).limit(4).lean();
+  const brandsRaw = await Brand.find({ isActive: true }).sort({ displayOrder: 1, name: 1 }).limit(5).lean();
 
   const defaultSections = {
     newOffers: { title: 'Browse New Offers', show: true },
@@ -104,7 +104,7 @@ export default async function HomePage() {
 
       {brandsRaw.length > 0 && (
         <BrandGrid
-          title="Shop via Brands"
+          title="Popular Brands"
           brands={serialize(brandsRaw)}
           onViewAll="/brands"
         />

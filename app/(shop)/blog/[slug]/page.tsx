@@ -86,11 +86,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="text-xs uppercase tracking-widest text-text-secondary mb-3">
+      <div className="text-xs uppercase tracking-widest text-black mb-3">
         {category?.name || 'Uncategorized'}
       </div>
       <h1 className="text-3xl font-bold mb-3">{post.title}</h1>
-      <div className="text-xs text-text-secondary mb-8">
+      <div className="text-xs text-black mb-8">
         {formatDate(post.publishedAt)}
         {post.readingTimeMinutes ? ` • ${post.readingTimeMinutes} min read` : ''}
       </div>

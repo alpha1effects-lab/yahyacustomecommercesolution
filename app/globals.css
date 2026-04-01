@@ -109,6 +109,10 @@
   .rich-text strong { font-weight: 700; }
   .rich-text em { font-style: italic; }
   .rich-text u { text-decoration: underline; }
+  .rich-text { overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; overflow-x: hidden; }
+  .rich-text * { max-width: 100%; }
+  .rich-text table { table-layout: fixed; width: 100%; overflow-x: auto; display: block; }
+  .rich-text pre { white-space: pre-wrap; word-break: break-word; }
   .rich-text .ql-align-center { text-align: center; }
   .rich-text .ql-align-right { text-align: right; }
   .rich-text .ql-align-justify { text-align: justify; }

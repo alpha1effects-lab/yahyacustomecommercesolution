@@ -31,7 +31,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
         {onViewAll && (
           <Link 
             href={onViewAll}
-            className="text-sm underline underline-offset-4 hover:text-text-secondary transition-colors text-black dark:text-gray-300 dark:hover:text-white"
+            className="text-sm underline underline-offset-4 hover:text-black transition-colors text-black dark:text-gray-300 dark:hover:text-white"
           >
             View all
           </Link>
@@ -73,10 +73,12 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
                   <h3 className="text-base font-medium text-black dark:text-white group-hover:underline underline-offset-4 decoration-1">
                     {product.name}
               </h3>
-              <p className="text-xs uppercase tracking-widest text-text-secondary dark:text-gray-400">
-                    {product.brand?.name || 'Unbranded'}
-              </p>
-              <p className="text-sm text-black dark:text-white pt-1">
+              {product.brand?.name && product.brand.name !== 'Unbranded' && (
+                <p className="text-xs uppercase tracking-widest text-black dark:text-gray-400">
+                  {product.brand.name}
+                </p>
+              )}
+              <p className="text-base font-medium text-black dark:text-white pt-1">
                 {formatPrice(product.price)}
               </p>
             </div>

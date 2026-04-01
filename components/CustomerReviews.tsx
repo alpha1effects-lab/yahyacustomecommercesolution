@@ -40,7 +40,7 @@ export const CustomerReviews: React.FC<CustomerReviewsProps> = ({ reviews }) => 
     <section className="max-w-[1440px] mx-auto px-6 py-24 border-t border-gray-100 dark:border-gray-800">
       <div className="flex justify-between items-end mb-10">
         <h2 className="text-3xl font-medium tracking-tight text-black dark:text-white">Customer Reviews</h2>
-        <span className="text-xs uppercase tracking-widest text-text-secondary dark:text-gray-400">Verified buyers</span>
+        <span className="text-xs uppercase tracking-widest text-black dark:text-gray-400">Verified buyers</span>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -56,12 +56,12 @@ export const CustomerReviews: React.FC<CustomerReviewsProps> = ({ reviews }) => 
                   className="dark:fill-white dark:text-white"
                 />
               ))}
-              <span className="text-xs text-text-secondary dark:text-gray-400 ml-2">{review.rating.toFixed(1)}</span>
+              <span className="text-xs text-black dark:text-gray-400 ml-2">{review.rating.toFixed(1)}</span>
             </div>
-            <p className="text-sm text-text-secondary dark:text-gray-300 leading-relaxed mb-6">"{review.text}"</p>
+            <p className="text-sm text-black dark:text-gray-300 leading-relaxed mb-6">"{review.text}"</p>
             <div className="text-sm font-semibold text-black dark:text-white">
               {review.name}
-              {review.location && <span className="text-xs text-text-secondary dark:text-gray-400 ml-2">{review.location}</span>}
+              {review.location && <span className="text-xs text-black dark:text-gray-400 ml-2">{review.location}</span>}
             </div>
           </div>
         ))}

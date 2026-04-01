@@ -19,6 +19,7 @@ export const Checkout: React.FC = () => {
   const [orderError, setOrderError] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cod');
   const [paymentMethodTexts, setPaymentMethodTexts] = useState<{ jazzcash?: string; bankTransfer?: string }>({});
+  const [deliverySettings, setDeliverySettings] = useState<{ type: string; flatFee: number; freeAboveAmount: number }>({ type: 'flat', flatFee: 0, freeAboveAmount: 0 });
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -35,12 +36,17 @@ export const Checkout: React.FC = () => {
       .then(res => res.json())
       .then(data => {
         if (data.paymentMethodTexts) setPaymentMethodTexts(data.paymentMethodTexts);
+        if (data.deliverySettings) setDeliverySettings({ type: data.deliverySettings.type || 'flat', flatFee: data.deliverySettings.flatFee ?? 0, freeAboveAmount: data.deliverySettings.freeAboveAmount ?? 0 });
       })
       .catch(() => {});
   }, []);
 
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const shipping = subtotal > 150 ? 0 : 15;
+  const shipping = (() => {
+    if (deliverySettings.type === 'always_free') return 0;
+    if (deliverySettings.type === 'free_above_threshold' && subtotal >= deliverySettings.freeAboveAmount) return 0;
+    return deliverySettings.flatFee;
+  })();
   const total = subtotal + shipping;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -141,14 +147,14 @@ export const Checkout: React.FC = () => {
       {/* Simple Header for Checkout */}
       <div className="border-b border-gray-100 dark:border-gray-800 py-6 px-6 md:px-12 flex justify-between items-center bg-white dark:bg-black sticky top-0 z-10">
         <h1 className="text-2xl font-bold tracking-[0.15em] uppercase text-black dark:text-white">Checkout</h1>
-        <Link href="/" className="text-sm text-text-secondary hover:text-black dark:hover:text-white transition-colors underline underline-offset-4">Return to Cart</Link>
+        <Link href="/" className="text-sm text-black hover:text-black dark:hover:text-white transition-colors underline underline-offset-4">Return to Cart</Link>
       </div>
 
       <div className="flex flex-col lg:flex-row max-w-[1440px] mx-auto">
         {/* Left Column: Forms */}
         <div className="flex-grow p-6 md:p-12 lg:pr-24">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm text-text-secondary dark:text-gray-400 mb-8">
+          <div className="flex items-center gap-2 text-sm text-black dark:text-gray-400 mb-8">
             <Link href="/" className="cursor-pointer hover:text-black dark:hover:text-white transition-colors">Cart</Link>
             <span className="text-xs">{'>'}</span>
             <span className="text-black dark:text-white font-medium">Checkout</span>
@@ -160,35 +166,35 @@ export const Checkout: React.FC = () => {
               <h2 className="text-lg font-medium mb-4 text-black dark:text-white">Your Information</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="md:col-span-2">
-                  <label className="block text-xs font-semibold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-1">Full Name *</label>
+                  <label className="block text-xs font-semibold uppercase tracking-widest text-black dark:text-gray-400 mb-1">Full Name *</label>
                   <input name="fullName" type="text" placeholder="Full name" value={formData.fullName} onChange={handleChange} className={inputClass} required />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-1">Email *</label>
+                  <label className="block text-xs font-semibold uppercase tracking-widest text-black dark:text-gray-400 mb-1">Email *</label>
                   <input name="email" type="email" placeholder="Email address" value={formData.email} onChange={handleChange} className={inputClass} required />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-1">Phone 1 *</label>
+                  <label className="block text-xs font-semibold uppercase tracking-widest text-black dark:text-gray-400 mb-1">Phone 1 *</label>
                   <input name="phone" type="tel" placeholder="Phone number" value={formData.phone} onChange={handleChange} className={inputClass} required />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-1">Phone 2 (Alternate - Optional)</label>
+                  <label className="block text-xs font-semibold uppercase tracking-widest text-black dark:text-gray-400 mb-1">Phone 2 (Alternate - Optional)</label>
                   <input name="phone2" type="tel" placeholder="Alternate phone" value={formData.phone2} onChange={handleChange} className={inputClass} />
                 </div>
                 <div className="md:col-span-2">
-                  <label className="block text-xs font-semibold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-1">Address *</label>
+                  <label className="block text-xs font-semibold uppercase tracking-widest text-black dark:text-gray-400 mb-1">Address *</label>
                   <input name="address" type="text" placeholder="Full address" value={formData.address} onChange={handleChange} className={inputClass} required />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-1">City *</label>
+                  <label className="block text-xs font-semibold uppercase tracking-widest text-black dark:text-gray-400 mb-1">City *</label>
                   <input name="city" type="text" placeholder="City" value={formData.city} onChange={handleChange} className={inputClass} required />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-1">Postal Code</label>
+                  <label className="block text-xs font-semibold uppercase tracking-widest text-black dark:text-gray-400 mb-1">Postal Code</label>
                   <input name="postalCode" type="text" placeholder="Postal code" value={formData.postalCode} onChange={handleChange} className={inputClass} />
                 </div>
                 <div className="md:col-span-2">
-                  <label className="block text-xs font-semibold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-1">Order Notes</label>
+                  <label className="block text-xs font-semibold uppercase tracking-widest text-black dark:text-gray-400 mb-1">Order Notes</label>
                   <textarea name="orderNotes" placeholder="Any special instructions..." value={formData.orderNotes} onChange={handleChange} rows={3} className={inputClass} />
                 </div>
               </div>
@@ -265,7 +271,7 @@ export const Checkout: React.FC = () => {
                 </div>
                 <div className="flex-grow">
                   <h3 className="text-sm font-medium text-black dark:text-white">{item.name}</h3>
-                  <p className="text-xs text-text-secondary dark:text-gray-400">{item.brand?.name || 'Unbranded'}</p>
+                  <p className="text-xs text-black dark:text-gray-400">{item.brand?.name || 'Unbranded'}</p>
                 </div>
                 <div className="text-sm font-medium text-black dark:text-white">
                   {formatPrice(item.price * item.quantity)}
@@ -273,17 +279,17 @@ export const Checkout: React.FC = () => {
               </div>
             ))}
             {cartItems.length === 0 && (
-              <p className="text-text-secondary dark:text-gray-500 text-sm">Your cart is empty.</p>
+              <p className="text-black dark:text-gray-500 text-sm">Your cart is empty.</p>
             )}
           </div>
 
           <div className="border-t border-gray-200 dark:border-gray-700 mt-8 pt-8 space-y-4">
             <div className="flex justify-between text-sm">
-              <span className="text-text-secondary dark:text-gray-400">Subtotal</span>
+              <span className="text-black dark:text-gray-400">Subtotal</span>
               <span className="font-medium text-black dark:text-white">{formatPrice(subtotal)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-text-secondary dark:text-gray-400">Shipping</span>
+              <span className="text-black dark:text-gray-400">Shipping</span>
               <span className="font-medium text-black dark:text-white">{shipping === 0 ? 'Free' : formatPrice(shipping)}</span>
             </div>
             <div className="flex justify-between text-lg font-bold border-t border-gray-200 dark:border-gray-700 pt-4 text-black dark:text-white">

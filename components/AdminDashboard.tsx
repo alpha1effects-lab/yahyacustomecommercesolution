@@ -46,7 +46,7 @@ type CropState = {
 };
 
 export const AdminDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'products' | 'categories' | 'brands' | 'orders' | 'announcements' | 'newsletters' | 'inventory' | 'mega-menu' | 'footer' | 'layout' | 'comments' | 'payment-methods' | 'whatsapp' | 'qa'>('products');
+  const [activeTab, setActiveTab] = useState<'products' | 'categories' | 'brands' | 'orders' | 'announcements' | 'newsletters' | 'inventory' | 'mega-menu' | 'footer' | 'layout' | 'comments' | 'payment-methods' | 'whatsapp' | 'qa' | 'delivery'>('products');
   const [adminReviews, setAdminReviews] = useState<any[]>([]);
   const [reviewStatusFilter, setReviewStatusFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all');
   const [editingReview, setEditingReview] = useState<any | null>(null);
@@ -70,6 +70,8 @@ export const AdminDashboard: React.FC = () => {
   const [whatsappSaving, setWhatsappSaving] = useState(false);
   const [paymentMethodTexts, setPaymentMethodTexts] = useState<{ jazzcash: string; bankTransfer: string }>({ jazzcash: '', bankTransfer: '' });
   const [paymentMethodSaving, setPaymentMethodSaving] = useState(false);
+  const [deliverySettings, setDeliverySettings] = useState<{ type: 'flat' | 'free_above_threshold' | 'always_free'; flatFee: number; freeAboveAmount: number }>({ type: 'flat', flatFee: 0, freeAboveAmount: 0 });
+  const [deliverySaving, setDeliverySaving] = useState(false);
   const [users, setUsers] = useState<any[]>([]);
 
   const defaultSectionSettings: SectionSettings = {
@@ -226,6 +228,7 @@ export const AdminDashboard: React.FC = () => {
         if (settings.productsYouLoveProducts) setSectionProducts(prev => ({ ...prev, productsYouLove: settings.productsYouLoveProducts }));
         if (settings.whatsappNumber) setWhatsappNumber(settings.whatsappNumber);
         if (settings.paymentMethodTexts) setPaymentMethodTexts({ jazzcash: settings.paymentMethodTexts.jazzcash || '', bankTransfer: settings.paymentMethodTexts.bankTransfer || '' });
+        if (settings.deliverySettings) setDeliverySettings({ type: settings.deliverySettings.type || 'flat', flatFee: settings.deliverySettings.flatFee ?? 0, freeAboveAmount: settings.deliverySettings.freeAboveAmount ?? 0 });
       }
     } catch {} finally {
       setIsLoading(false);
@@ -599,6 +602,19 @@ export const AdminDashboard: React.FC = () => {
     }
   };
 
+  const handleSaveDeliverySettings = async () => {
+    setDeliverySaving(true);
+    try {
+      await fetch('/api/admin/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ deliverySettings }),
+      });
+    } catch {} finally {
+      setDeliverySaving(false);
+    }
+  };
+
   const handleOrderEditChange = (orderId: string, field: 'status' | 'trackingNumber' | 'estimatedDelivery', value: string) => {
     setOrderEdits(prev => ({
       ...prev,
@@ -926,7 +942,7 @@ export const AdminDashboard: React.FC = () => {
         <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
           <div>
             <h4 className="font-bold text-sm uppercase tracking-wide mb-1 text-black dark:text-white">{label}</h4>
-            <p className="text-xs text-text-secondary dark:text-gray-400">Manage visibility, title{isProductSection ? ' and products' : ''}.</p>
+            <p className="text-xs text-black dark:text-gray-400">Manage visibility, title{isProductSection ? ' and products' : ''}.</p>
           </div>
           <div className="flex items-center gap-6">
             <div className="flex flex-col">
@@ -953,7 +969,7 @@ export const AdminDashboard: React.FC = () => {
         {isProductSection && (
           <div className="bg-gray-50 dark:bg-neutral-800 p-4 border border-gray-100 dark:border-gray-700 rounded-sm">
             <div className="flex justify-between items-center mb-4">
-              <h5 className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Curated Products</h5>
+              <h5 className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Curated Products</h5>
               <button 
                 onClick={() => setProductSelectorOpen({ isOpen: true, section: key as 'newOffers' | 'bestOffers' | 'productsYouLove' })}
                 className="text-xs flex items-center gap-1 font-bold text-black dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
@@ -978,7 +994,7 @@ export const AdminDashboard: React.FC = () => {
                 </div>
               ))}
               {(sectionProducts[key as 'newOffers' | 'bestOffers' | 'productsYouLove'] || []).length === 0 && (
-                <div className="w-full py-4 text-center text-xs text-text-secondary dark:text-gray-500 italic">
+                <div className="w-full py-4 text-center text-xs text-black dark:text-gray-500 italic">
                   No products selected for this section.
                 </div>
               )}
@@ -990,7 +1006,7 @@ export const AdminDashboard: React.FC = () => {
   };
 
   if (isLoading) {
-    return <div className="min-h-screen flex items-center justify-center text-text-secondary">Loading admin panel...</div>;
+    return <div className="min-h-screen flex items-center justify-center text-black">Loading admin panel...</div>;
   }
 
   return (
@@ -1024,7 +1040,7 @@ export const AdminDashboard: React.FC = () => {
           <div className="bg-white dark:bg-neutral-900 p-6 shadow-sm border-l-4 border-black cursor-pointer hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors" onClick={() => setActiveTab('products')}>
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-1">Total Products</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400 mb-1">Total Products</p>
                 <p className="text-3xl font-bold text-black dark:text-white">{products.length}</p>
               </div>
               <Package className="text-gray-300" size={24} />
@@ -1033,7 +1049,7 @@ export const AdminDashboard: React.FC = () => {
           <div className="bg-white dark:bg-neutral-900 p-6 shadow-sm border-l-4 border-black cursor-pointer hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors" onClick={() => setActiveTab('categories')}>
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-1">Categories</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400 mb-1">Categories</p>
                 <p className="text-3xl font-bold text-black dark:text-white">{categories.length}</p>
               </div>
               <Tags className="text-gray-300" size={24} />
@@ -1042,7 +1058,7 @@ export const AdminDashboard: React.FC = () => {
           <div className="bg-white dark:bg-neutral-900 p-6 shadow-sm border-l-4 border-black cursor-pointer hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors" onClick={() => setActiveTab('brands')}>
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-1">Brands</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400 mb-1">Brands</p>
                 <p className="text-3xl font-bold text-black dark:text-white">{brands.length}</p>
               </div>
               <Tags className="text-gray-300" size={24} />
@@ -1051,7 +1067,7 @@ export const AdminDashboard: React.FC = () => {
           <div className="bg-white dark:bg-neutral-900 p-6 shadow-sm border-l-4 border-black cursor-pointer hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors" onClick={() => setActiveTab('orders')}>
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-1">Orders</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400 mb-1">Orders</p>
                 <p className="text-3xl font-bold text-black dark:text-white">{orders.length}</p>
               </div>
               <ClipboardList className="text-gray-300" size={24} />
@@ -1074,6 +1090,7 @@ export const AdminDashboard: React.FC = () => {
             { key: 'layout', label: 'Homepage Layout' },
             { key: 'comments', label: 'Comments' },
             { key: 'payment-methods', label: 'Payment Methods' },
+            { key: 'delivery', label: 'Delivery' },
             { key: 'whatsapp', label: 'WhatsApp' },
             { key: 'qa', label: 'Q&A' },
           ] as const).map(tab => (
@@ -1116,7 +1133,7 @@ export const AdminDashboard: React.FC = () => {
             <div className="p-6 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-neutral-800">
               <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                 <div className="md:col-span-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Search</label>
+                  <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Search</label>
                   <input
                     type="text"
                     value={productSearch}
@@ -1126,7 +1143,7 @@ export const AdminDashboard: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Brand</label>
+                  <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Brand</label>
                   <select
                     value={productBrandFilter}
                     onChange={(e) => setProductBrandFilter(e.target.value)}
@@ -1139,7 +1156,7 @@ export const AdminDashboard: React.FC = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Category</label>
+                  <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Category</label>
                   <select
                     value={productCategoryFilter}
                     onChange={(e) => setProductCategoryFilter(e.target.value)}
@@ -1152,7 +1169,7 @@ export const AdminDashboard: React.FC = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Status</label>
+                  <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Status</label>
                   <select
                     value={productStatusFilter}
                     onChange={(e) => setProductStatusFilter(e.target.value as 'all' | 'published' | 'draft')}
@@ -1168,7 +1185,7 @@ export const AdminDashboard: React.FC = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-gray-50 dark:bg-neutral-800 text-xs uppercase tracking-widest text-text-secondary dark:text-gray-400">
+                  <tr className="bg-gray-50 dark:bg-neutral-800 text-xs uppercase tracking-widest text-black dark:text-gray-400">
                     <th className="p-6 font-semibold border-b border-gray-100 dark:border-gray-800">Product</th>
                     <th className="p-6 font-semibold border-b border-gray-100 dark:border-gray-800">SKU</th>
                     <th className="p-6 font-semibold border-b border-gray-100 dark:border-gray-800">Brand</th>
@@ -1188,7 +1205,7 @@ export const AdminDashboard: React.FC = () => {
                           <span className="font-medium text-black dark:text-white">{product.name}</span>
                         </div>
                       </td>
-                      <td className="p-6 border-b border-gray-100 dark:border-gray-800 text-xs text-text-secondary dark:text-gray-400">
+                      <td className="p-6 border-b border-gray-100 dark:border-gray-800 text-xs text-black dark:text-gray-400">
                         {product.sku}
                       </td>
                       <td className="p-6 border-b border-gray-100 dark:border-gray-800">
@@ -1212,10 +1229,10 @@ export const AdminDashboard: React.FC = () => {
               </table>
             </div>
             {products.length === 0 && (
-              <div className="p-12 text-center text-text-secondary dark:text-gray-500"><p>No products available.</p></div>
+              <div className="p-12 text-center text-black dark:text-gray-500"><p>No products available.</p></div>
             )}
             {products.length > 0 && filteredProducts.length === 0 && (
-              <div className="p-12 text-center text-text-secondary dark:text-gray-500"><p>No products match these filters.</p></div>
+              <div className="p-12 text-center text-black dark:text-gray-500"><p>No products match these filters.</p></div>
             )}
           </div>
         )}
@@ -1240,7 +1257,7 @@ export const AdminDashboard: React.FC = () => {
               <div className="p-6 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-neutral-800">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Name</label>
+                    <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Name</label>
                     <input
                       type="text"
                       value={categoryForm.name}
@@ -1249,7 +1266,7 @@ export const AdminDashboard: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Slug (optional)</label>
+                    <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Slug (optional)</label>
                     <input
                       type="text"
                       value={categoryForm.slug}
@@ -1258,7 +1275,7 @@ export const AdminDashboard: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Parent Category</label>
+                    <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Parent Category</label>
                     <select
                       value={categoryForm.parentId}
                       onChange={(e) => setCategoryForm(prev => ({ ...prev, parentId: e.target.value }))}
@@ -1271,7 +1288,7 @@ export const AdminDashboard: React.FC = () => {
                     </select>
                   </div>
                   <div className="md:col-span-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Description</label>
+                    <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Description</label>
                     <textarea
                       value={categoryForm.description}
                       onChange={(e) => setCategoryForm(prev => ({ ...prev, description: e.target.value }))}
@@ -1297,7 +1314,7 @@ export const AdminDashboard: React.FC = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-gray-50 dark:bg-neutral-800 text-xs uppercase tracking-widest text-text-secondary dark:text-gray-400">
+                  <tr className="bg-gray-50 dark:bg-neutral-800 text-xs uppercase tracking-widest text-black dark:text-gray-400">
                     <th className="p-6 font-semibold border-b border-gray-100 dark:border-gray-800">Name</th>
                     <th className="p-6 font-semibold border-b border-gray-100 dark:border-gray-800">Slug</th>
                     <th className="p-6 font-semibold border-b border-gray-100 dark:border-gray-800">Parent</th>
@@ -1312,8 +1329,8 @@ export const AdminDashboard: React.FC = () => {
                       <tr key={category._id} className="hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors">
                         <td className="p-6 border-b border-gray-100 dark:border-gray-800 font-medium text-black dark:text-white">{category.name}</td>
                         <td className="p-6 border-b border-gray-100 dark:border-gray-800"><span className="px-2 py-1 bg-gray-100 dark:bg-neutral-700 rounded text-xs">{category.slug}</span></td>
-                        <td className="p-6 border-b border-gray-100 dark:border-gray-800 text-text-secondary dark:text-gray-400">{parent?.name || '-'}</td>
-                        <td className="p-6 border-b border-gray-100 dark:border-gray-800 text-text-secondary dark:text-gray-400">{category.attributes?.length ? category.attributes.length : '-'}</td>
+                        <td className="p-6 border-b border-gray-100 dark:border-gray-800 text-black dark:text-gray-400">{parent?.name || '-'}</td>
+                        <td className="p-6 border-b border-gray-100 dark:border-gray-800 text-black dark:text-gray-400">{category.attributes?.length ? category.attributes.length : '-'}</td>
                         <td className="p-6 border-b border-gray-100 dark:border-gray-800 text-right">
                           <div className="flex items-center justify-end gap-3">
                             <button onClick={() => handleEditCategory(category)} className="text-gray-400 hover:text-black dark:hover:text-white transition-colors" title="Edit"><Edit2 size={16} /></button>
@@ -1327,7 +1344,7 @@ export const AdminDashboard: React.FC = () => {
               </table>
             </div>
             {categories.length === 0 && (
-              <div className="p-12 text-center text-text-secondary dark:text-gray-500"><p>No categories found.</p></div>
+              <div className="p-12 text-center text-black dark:text-gray-500"><p>No categories found.</p></div>
             )}
           </div>
         )}
@@ -1352,7 +1369,7 @@ export const AdminDashboard: React.FC = () => {
               <div className="p-6 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-neutral-800">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Brand Name</label>
+                    <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Brand Name</label>
                     <input
                       type="text"
                       value={brandForm.name}
@@ -1361,7 +1378,7 @@ export const AdminDashboard: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Slug (optional)</label>
+                    <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Slug (optional)</label>
                     <input
                       type="text"
                       value={brandForm.slug}
@@ -1370,7 +1387,7 @@ export const AdminDashboard: React.FC = () => {
                     />
                   </div>
                   <div className="md:col-span-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Description</label>
+                    <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Description</label>
                     <textarea
                       value={brandForm.description}
                       onChange={(e) => setBrandForm(prev => ({ ...prev, description: e.target.value }))}
@@ -1378,7 +1395,7 @@ export const AdminDashboard: React.FC = () => {
                     />
                   </div>
                   <div className="md:col-span-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Logo</label>
+                    <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Logo</label>
                     <input
                       type="text"
                       value={brandForm.logo}
@@ -1433,7 +1450,7 @@ export const AdminDashboard: React.FC = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-gray-50 dark:bg-neutral-800 text-xs uppercase tracking-widest text-text-secondary dark:text-gray-400">
+                  <tr className="bg-gray-50 dark:bg-neutral-800 text-xs uppercase tracking-widest text-black dark:text-gray-400">
                     <th className="p-6 font-semibold border-b border-gray-100 dark:border-gray-800">Brand</th>
                     <th className="p-6 font-semibold border-b border-gray-100 dark:border-gray-800">Slug</th>
                     <th className="p-6 font-semibold border-b border-gray-100 dark:border-gray-800">Logo</th>
@@ -1455,10 +1472,10 @@ export const AdminDashboard: React.FC = () => {
                         {brand.logo ? (
                           <img src={brand.logo} alt={`${brand.name} logo`} className="w-10 h-10 object-contain" />
                         ) : (
-                          <span className="text-xs text-text-secondary dark:text-gray-500">-</span>
+                          <span className="text-xs text-black dark:text-gray-500">-</span>
                         )}
                       </td>
-                      <td className="p-6 border-b border-gray-100 dark:border-gray-800 text-text-secondary dark:text-gray-400 max-w-[340px] truncate">{brand.description || '-'}</td>
+                      <td className="p-6 border-b border-gray-100 dark:border-gray-800 text-black dark:text-gray-400 max-w-[340px] truncate">{brand.description || '-'}</td>
                       <td className="p-6 border-b border-gray-100 dark:border-gray-800 text-right">
                         <div className="flex items-center justify-end gap-3">
                           <button onClick={() => handleEditBrand(brand)} className="text-gray-400 hover:text-black dark:hover:text-white transition-colors" title="Edit"><Edit2 size={16} /></button>
@@ -1471,7 +1488,7 @@ export const AdminDashboard: React.FC = () => {
               </table>
             </div>
             {brands.length === 0 && (
-              <div className="p-12 text-center text-text-secondary dark:text-gray-500"><p>No brands found.</p></div>
+              <div className="p-12 text-center text-black dark:text-gray-500"><p>No brands found.</p></div>
             )}
           </div>
         )}
@@ -1507,11 +1524,11 @@ export const AdminDashboard: React.FC = () => {
                     <div className="flex items-center gap-6 flex-wrap">
                       <div>
                         <div className="font-medium text-black dark:text-white text-sm">{order.orderNumber}</div>
-                        <div className="text-xs text-text-secondary dark:text-gray-400">{new Date(order.createdAt).toLocaleDateString()}</div>
+                        <div className="text-xs text-black dark:text-gray-400">{new Date(order.createdAt).toLocaleDateString()}</div>
                       </div>
                       <div>
                         <div className="font-medium text-black dark:text-white text-sm">{order.customer.fullName}</div>
-                        <div className="text-xs text-text-secondary dark:text-gray-400">{order.customer.email}</div>
+                        <div className="text-xs text-black dark:text-gray-400">{order.customer.email}</div>
                       </div>
                       <div className="text-sm font-medium text-black dark:text-white">Rs. {order.total.toLocaleString()}</div>
                       <span className={`text-xs font-bold uppercase tracking-widest px-2 py-1 ${order.status === 'delivered' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : order.status === 'cancelled' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'}`}>{order.status}</span>
@@ -1524,7 +1541,7 @@ export const AdminDashboard: React.FC = () => {
                     <div className="px-6 pb-6 bg-gray-50 dark:bg-neutral-800/50 border-t border-gray-100 dark:border-gray-800">
                       {/* Order Items */}
                       <div className="mt-4 mb-4">
-                        <h4 className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-2">Items</h4>
+                        <h4 className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400 mb-2">Items</h4>
                         <div className="space-y-2">
                           {order.items.map((item, idx) => (
                             <div key={idx} className="flex items-center gap-3 text-sm">
@@ -1533,7 +1550,7 @@ export const AdminDashboard: React.FC = () => {
                               )}
                               <div className="flex-grow">
                                 <span className="font-medium text-black dark:text-white">{item.name}</span>
-                                <span className="text-xs text-text-secondary dark:text-gray-400 ml-2">x{item.quantity}</span>
+                                <span className="text-xs text-black dark:text-gray-400 ml-2">x{item.quantity}</span>
                               </div>
                               <span className="text-black dark:text-white">Rs. {item.total.toLocaleString()}</span>
                             </div>
@@ -1544,25 +1561,25 @@ export const AdminDashboard: React.FC = () => {
                       {/* Customer Details */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
-                          <h4 className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-1">Customer Info</h4>
+                          <h4 className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400 mb-1">Customer Info</h4>
                           <p className="text-sm text-black dark:text-white">{order.customer.fullName}</p>
-                          <p className="text-sm text-text-secondary dark:text-gray-400">{order.customer.email}</p>
-                          <p className="text-sm text-text-secondary dark:text-gray-400">{order.customer.phone}</p>
-                          {order.customer.phone2 && <p className="text-sm text-text-secondary dark:text-gray-400">{order.customer.phone2}</p>}
+                          <p className="text-sm text-black dark:text-gray-400">{order.customer.email}</p>
+                          <p className="text-sm text-black dark:text-gray-400">{order.customer.phone}</p>
+                          {order.customer.phone2 && <p className="text-sm text-black dark:text-gray-400">{order.customer.phone2}</p>}
                         </div>
                         <div>
-                          <h4 className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-1">Shipping Address</h4>
+                          <h4 className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400 mb-1">Shipping Address</h4>
                           <p className="text-sm text-black dark:text-white">{order.customer.address}</p>
-                          <p className="text-sm text-text-secondary dark:text-gray-400">{order.customer.city}{order.customer.postalCode ? `, ${order.customer.postalCode}` : ''}</p>
+                          <p className="text-sm text-black dark:text-gray-400">{order.customer.city}{order.customer.postalCode ? `, ${order.customer.postalCode}` : ''}</p>
                         </div>
                       </div>
 
                       {/* Pricing */}
                       <div className="mb-4">
-                        <h4 className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-1">Pricing</h4>
+                        <h4 className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400 mb-1">Pricing</h4>
                         <div className="text-sm space-y-1">
-                          <div className="flex justify-between max-w-xs"><span className="text-text-secondary dark:text-gray-400">Subtotal</span><span className="text-black dark:text-white">Rs. {order.subtotal.toLocaleString()}</span></div>
-                          <div className="flex justify-between max-w-xs"><span className="text-text-secondary dark:text-gray-400">Delivery</span><span className="text-black dark:text-white">Rs. {order.deliveryFee.toLocaleString()}</span></div>
+                          <div className="flex justify-between max-w-xs"><span className="text-black dark:text-gray-400">Subtotal</span><span className="text-black dark:text-white">Rs. {order.subtotal.toLocaleString()}</span></div>
+                          <div className="flex justify-between max-w-xs"><span className="text-black dark:text-gray-400">Delivery</span><span className="text-black dark:text-white">Rs. {order.deliveryFee.toLocaleString()}</span></div>
                           <div className="flex justify-between max-w-xs font-bold"><span className="text-black dark:text-white">Total</span><span className="text-black dark:text-white">Rs. {order.total.toLocaleString()}</span></div>
                         </div>
                       </div>
@@ -1570,13 +1587,13 @@ export const AdminDashboard: React.FC = () => {
                       {/* Payment & Notes */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
-                          <h4 className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-1">Payment Method</h4>
+                          <h4 className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400 mb-1">Payment Method</h4>
                           <p className="text-sm text-black dark:text-white">{order.paymentMethod}</p>
                         </div>
                         {order.notes && (
                           <div>
-                            <h4 className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-1">Notes</h4>
-                            <p className="text-sm text-text-secondary dark:text-gray-400">{order.notes}</p>
+                            <h4 className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400 mb-1">Notes</h4>
+                            <p className="text-sm text-black dark:text-gray-400">{order.notes}</p>
                           </div>
                         )}
                       </div>
@@ -1584,7 +1601,7 @@ export const AdminDashboard: React.FC = () => {
                       {/* Admin Controls */}
                       <div className="flex flex-wrap gap-4 items-end border-t border-gray-200 dark:border-gray-700 pt-4">
                         <div>
-                          <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Status</label>
+                          <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Status</label>
                           <select
                             value={orderEdits[order._id]?.status || order.status}
                             onChange={(e) => handleOrderEditChange(order._id, 'status', e.target.value)}
@@ -1596,7 +1613,7 @@ export const AdminDashboard: React.FC = () => {
                           </select>
                         </div>
                         <div>
-                          <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Tracking</label>
+                          <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Tracking</label>
                           <input
                             type="text"
                             placeholder="Tracking number"
@@ -1606,7 +1623,7 @@ export const AdminDashboard: React.FC = () => {
                           />
                         </div>
                         <div>
-                          <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Est. Delivery</label>
+                          <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Est. Delivery</label>
                           <input
                             type="date"
                             value={orderEdits[order._id]?.estimatedDelivery || (order.estimatedDelivery ? new Date(order.estimatedDelivery).toISOString().split('T')[0] : '')}
@@ -1624,7 +1641,7 @@ export const AdminDashboard: React.FC = () => {
               ))}
             </div>
             {orders.length === 0 && (
-              <div className="p-12 text-center text-text-secondary dark:text-gray-500"><p>No orders found.</p></div>
+              <div className="p-12 text-center text-black dark:text-gray-500"><p>No orders found.</p></div>
             )}
           </div>
         )}
@@ -1635,14 +1652,14 @@ export const AdminDashboard: React.FC = () => {
             <div className="p-6 border-b border-gray-100 dark:border-gray-800">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-bold tracking-tight text-black dark:text-white">Announcement Bar</h2>
-                <span className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">{announcements.length} / 5</span>
+                <span className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">{announcements.length} / 5</span>
               </div>
-              <p className="text-xs text-text-secondary dark:text-gray-400 mt-2">Announcements scroll above the header. Add up to five active items.</p>
+              <p className="text-xs text-black dark:text-gray-400 mt-2">Announcements scroll above the header. Add up to five active items.</p>
             </div>
             <div className="p-6 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-neutral-800">
               <div className="grid grid-cols-1 md:grid-cols-[1fr_120px_120px] gap-4 items-end">
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Announcement Text</label>
+                  <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Announcement Text</label>
                   <input
                     type="text"
                     value={announcementForm.text}
@@ -1652,7 +1669,7 @@ export const AdminDashboard: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Order</label>
+                  <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Order</label>
                   <input
                     type="number"
                     value={announcementForm.order}
@@ -1675,7 +1692,7 @@ export const AdminDashboard: React.FC = () => {
             </div>
             <div className="p-6">
               {announcements.length === 0 ? (
-                <div className="text-center text-text-secondary dark:text-gray-500">No announcements yet.</div>
+                <div className="text-center text-black dark:text-gray-500">No announcements yet.</div>
               ) : (
                 <div className="space-y-4">
                   {announcements.map(announcement => (
@@ -1733,15 +1750,15 @@ export const AdminDashboard: React.FC = () => {
             <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6 border-b border-gray-100 dark:border-gray-800">
               <div className="bg-gray-50 dark:bg-neutral-800 p-4 text-center">
                 <div className="text-2xl font-bold text-black dark:text-white">{newsletters.length}</div>
-                <div className="text-xs uppercase tracking-widest text-text-secondary dark:text-gray-400">Total Subscribers</div>
+                <div className="text-xs uppercase tracking-widest text-black dark:text-gray-400">Total Subscribers</div>
               </div>
               <div className="bg-gray-50 dark:bg-neutral-800 p-4 text-center">
                 <div className="text-2xl font-bold text-black dark:text-white">{newsletters.filter(n => n.isActive).length}</div>
-                <div className="text-xs uppercase tracking-widest text-text-secondary dark:text-gray-400">Active</div>
+                <div className="text-xs uppercase tracking-widest text-black dark:text-gray-400">Active</div>
               </div>
               <div className="bg-gray-50 dark:bg-neutral-800 p-4 text-center">
                 <div className="text-2xl font-bold text-black dark:text-white">{newsletters.filter(n => !n.isActive).length}</div>
-                <div className="text-xs uppercase tracking-widest text-text-secondary dark:text-gray-400">Unsubscribed</div>
+                <div className="text-xs uppercase tracking-widest text-black dark:text-gray-400">Unsubscribed</div>
               </div>
             </div>
             <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex flex-col md:flex-row gap-4 items-center">
@@ -1763,7 +1780,7 @@ export const AdminDashboard: React.FC = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-gray-50 dark:bg-neutral-800 text-xs uppercase tracking-widest text-text-secondary dark:text-gray-400">
+                  <tr className="bg-gray-50 dark:bg-neutral-800 text-xs uppercase tracking-widest text-black dark:text-gray-400">
                     <th className="p-6 font-semibold border-b border-gray-100 dark:border-gray-800">Email</th>
                     <th className="p-6 font-semibold border-b border-gray-100 dark:border-gray-800">Status</th>
                     <th className="p-6 font-semibold border-b border-gray-100 dark:border-gray-800">Source</th>
@@ -1779,7 +1796,7 @@ export const AdminDashboard: React.FC = () => {
                           {subscriber.isActive ? 'Active' : 'Inactive'}
                         </span>
                       </td>
-                      <td className="p-6 border-b border-gray-100 dark:border-gray-800 text-text-secondary dark:text-gray-400">{subscriber.source || 'website'}</td>
+                      <td className="p-6 border-b border-gray-100 dark:border-gray-800 text-black dark:text-gray-400">{subscriber.source || 'website'}</td>
                       <td className="p-6 border-b border-gray-100 dark:border-gray-800 text-right">
                         <div className="flex items-center justify-end gap-3">
                           <button onClick={() => handleToggleSubscriber(subscriber)} className="text-gray-400 hover:text-black dark:hover:text-white transition-colors" title="Toggle status"><Edit2 size={16} /></button>
@@ -1792,7 +1809,7 @@ export const AdminDashboard: React.FC = () => {
               </table>
             </div>
             {newsletters.length === 0 && (
-              <div className="p-12 text-center text-text-secondary dark:text-gray-500"><p>No subscribers found.</p></div>
+              <div className="p-12 text-center text-black dark:text-gray-500"><p>No subscribers found.</p></div>
             )}
           </div>
         )}
@@ -1801,12 +1818,12 @@ export const AdminDashboard: React.FC = () => {
           <div className="bg-white dark:bg-neutral-900 shadow-sm border border-gray-200 dark:border-gray-800 animate-fade-in">
             <div className="p-6 border-b border-gray-100 dark:border-gray-800">
               <h2 className="text-xl font-bold tracking-tight text-black dark:text-white">Inventory</h2>
-              <p className="text-xs text-text-secondary dark:text-gray-400 mt-2">Update stock counts for each product.</p>
+              <p className="text-xs text-black dark:text-gray-400 mt-2">Update stock counts for each product.</p>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-gray-50 dark:bg-neutral-800 text-xs uppercase tracking-widest text-text-secondary dark:text-gray-400">
+                  <tr className="bg-gray-50 dark:bg-neutral-800 text-xs uppercase tracking-widest text-black dark:text-gray-400">
                     <th className="p-6 font-semibold border-b border-gray-100 dark:border-gray-800">Product</th>
                     <th className="p-6 font-semibold border-b border-gray-100 dark:border-gray-800">SKU</th>
                     <th className="p-6 font-semibold border-b border-gray-100 dark:border-gray-800">Stock</th>
@@ -1826,7 +1843,7 @@ export const AdminDashboard: React.FC = () => {
                           <span className="font-medium text-black dark:text-white">{product.name}</span>
                         </div>
                       </td>
-                      <td className="p-6 border-b border-gray-100 dark:border-gray-800 text-xs text-text-secondary dark:text-gray-400">
+                      <td className="p-6 border-b border-gray-100 dark:border-gray-800 text-xs text-black dark:text-gray-400">
                         {product.sku}
                       </td>
                       <td className="p-6 border-b border-gray-100 dark:border-gray-800">
@@ -1855,7 +1872,7 @@ export const AdminDashboard: React.FC = () => {
               </table>
             </div>
             {products.length === 0 && (
-              <div className="p-12 text-center text-text-secondary dark:text-gray-500"><p>No products available.</p></div>
+              <div className="p-12 text-center text-black dark:text-gray-500"><p>No products available.</p></div>
             )}
           </div>
         )}
@@ -1865,7 +1882,7 @@ export const AdminDashboard: React.FC = () => {
             <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <h2 className="text-xl font-bold tracking-tight text-black dark:text-white">Mega Menu</h2>
-                <p className="text-xs text-text-secondary dark:text-gray-400 mt-2">Manage top nav labels, columns, images, and links.</p>
+                <p className="text-xs text-black dark:text-gray-400 mt-2">Manage top nav labels, columns, images, and links.</p>
               </div>
               <div className="flex items-center gap-3">
                 <Button variant="outline" onClick={addMegaMenuItem}>Add Top Item</Button>
@@ -1877,14 +1894,14 @@ export const AdminDashboard: React.FC = () => {
             <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)] gap-6 p-6">
               <div className="space-y-6">
                 {megaMenu.length === 0 && (
-                  <div className="text-sm text-text-secondary dark:text-gray-500">No mega menu items yet.</div>
+                  <div className="text-sm text-black dark:text-gray-500">No mega menu items yet.</div>
                 )}
                   {megaMenu.map((item, itemIndex) => (
                   <div key={`mega-${itemIndex}`} className="border border-gray-100 dark:border-gray-800 p-6 bg-gray-50 dark:bg-neutral-800">
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
                         <div>
-                          <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Top Label</label>
+                          <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Top Label</label>
                           <input
                             type="text"
                             value={item.label}
@@ -1893,7 +1910,7 @@ export const AdminDashboard: React.FC = () => {
                           />
                         </div>
                         <div>
-                          <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Top Link (optional)</label>
+                          <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Top Link (optional)</label>
                           <input
                             type="text"
                             value={item.href || ''}
@@ -1902,7 +1919,7 @@ export const AdminDashboard: React.FC = () => {
                           />
                         </div>
                           <div>
-                            <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Order</label>
+                            <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Order</label>
                             <input
                               type="number"
                               value={item.order ?? 0}
@@ -1916,14 +1933,14 @@ export const AdminDashboard: React.FC = () => {
 
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
-                        <h3 className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Columns</h3>
+                        <h3 className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Columns</h3>
                         <Button variant="outline" onClick={() => addMegaMenuColumn(itemIndex)}>Add Column</Button>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {item.columns.map((column, columnIndex) => (
                           <div key={`mega-col-${columnIndex}`} className="border border-gray-200 dark:border-gray-700 p-4 bg-white dark:bg-neutral-900">
                             <div className="flex items-center justify-between mb-3">
-                              <span className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Column {columnIndex + 1}</span>
+                              <span className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Column {columnIndex + 1}</span>
                               <button
                                 onClick={() => removeMegaMenuColumn(itemIndex, columnIndex)}
                                 className="text-xs uppercase tracking-widest text-red-500"
@@ -1933,7 +1950,7 @@ export const AdminDashboard: React.FC = () => {
                             </div>
                             <div className="space-y-3">
                               <div>
-                                <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Title</label>
+                                <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Title</label>
                                 <input
                                   type="text"
                                   value={column.title}
@@ -1948,7 +1965,7 @@ export const AdminDashboard: React.FC = () => {
                                 />
                               </div>
                               <div>
-                                <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Order</label>
+                                <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Order</label>
                                 <input
                                   type="number"
                                   value={column.order ?? 0}
@@ -1963,7 +1980,7 @@ export const AdminDashboard: React.FC = () => {
                                 />
                               </div>
                               <div>
-                                <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Image (optional)</label>
+                                <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Image (optional)</label>
                                 <div className="flex flex-col gap-2">
                                   <label className="flex items-center gap-2 border border-dashed border-gray-300 dark:border-gray-700 p-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors text-xs">
                                     Upload image
@@ -2000,7 +2017,7 @@ export const AdminDashboard: React.FC = () => {
                               </div>
                               <div className="space-y-2">
                                 <div className="flex items-center justify-between">
-                                  <span className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Links</span>
+                                  <span className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Links</span>
                                   <button
                                     onClick={() => addMegaMenuLink(itemIndex, columnIndex)}
                                     className="text-xs uppercase tracking-widest text-black dark:text-white"
@@ -2060,9 +2077,9 @@ export const AdminDashboard: React.FC = () => {
                 ))}
               </div>
               <div className="border border-gray-200 dark:border-gray-800 bg-white dark:bg-neutral-900 p-6 h-fit sticky top-24">
-                <h3 className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-4">Live Preview</h3>
+                <h3 className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400 mb-4">Live Preview</h3>
                 <div className="border border-gray-100 dark:border-gray-800">
-                  <div className="flex flex-wrap gap-6 px-6 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-text-secondary dark:text-gray-400">
+                  <div className="flex flex-wrap gap-6 px-6 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-black dark:text-gray-400">
                     {orderedMegaMenu.map((item, index) => (
                       <button
                         key={`preview-${item.label}-${index}`}
@@ -2075,7 +2092,7 @@ export const AdminDashboard: React.FC = () => {
                   </div>
                   <div className="border-t border-gray-100 dark:border-gray-800 px-6 py-6">
                     {orderedMegaMenu.length === 0 ? (
-                      <div className="text-sm text-text-secondary dark:text-gray-500">Preview will appear here.</div>
+                      <div className="text-sm text-black dark:text-gray-500">Preview will appear here.</div>
                     ) : (
                       <div
                         className="grid gap-6"
@@ -2095,7 +2112,7 @@ export const AdminDashboard: React.FC = () => {
                                 {column.title}
                               </div>
                             )}
-                            <div className="flex flex-col gap-2 text-xs text-text-secondary dark:text-gray-400">
+                            <div className="flex flex-col gap-2 text-xs text-black dark:text-gray-400">
                               {[...(column.links || [])]
                                 .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
                                 .map((link, linkIndex) => (
@@ -2118,7 +2135,7 @@ export const AdminDashboard: React.FC = () => {
             <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <h2 className="text-xl font-bold tracking-tight text-black dark:text-white">Footer</h2>
-                <p className="text-xs text-text-secondary dark:text-gray-400 mt-2">Control footer columns, top links, and social icons.</p>
+                <p className="text-xs text-black dark:text-gray-400 mt-2">Control footer columns, top links, and social icons.</p>
               </div>
               <div className="flex items-center gap-3">
                 <Button variant="outline" onClick={addFooterColumn}>Add Column</Button>
@@ -2131,7 +2148,7 @@ export const AdminDashboard: React.FC = () => {
               <div className="space-y-6">
                 <div className="border border-gray-100 dark:border-gray-800 p-6 bg-gray-50 dark:bg-neutral-800">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Top Links</h3>
+                    <h3 className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Top Links</h3>
                     <Button variant="outline" onClick={addFooterTopLink}>Add Link</Button>
                   </div>
                   <div className="space-y-3">
@@ -2169,13 +2186,13 @@ export const AdminDashboard: React.FC = () => {
                       </div>
                     ))}
                     {footerConfig.topLinks.length === 0 && (
-                      <div className="text-xs text-text-secondary dark:text-gray-500 italic">No top links yet.</div>
+                      <div className="text-xs text-black dark:text-gray-500 italic">No top links yet.</div>
                     )}
                   </div>
                 </div>
 
                 <div className="border border-gray-100 dark:border-gray-800 p-6 bg-gray-50 dark:bg-neutral-800">
-                  <h3 className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-4">Social Links</h3>
+                  <h3 className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400 mb-4">Social Links</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {([
                       { key: 'instagram', label: 'Instagram' },
@@ -2204,12 +2221,12 @@ export const AdminDashboard: React.FC = () => {
                   {footerConfig.columns.map((column, columnIndex) => (
                     <div key={`footer-col-${columnIndex}`} className="border border-gray-100 dark:border-gray-800 p-6 bg-gray-50 dark:bg-neutral-800">
                       <div className="flex items-center justify-between mb-4">
-                        <span className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Column {columnIndex + 1}</span>
+                        <span className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Column {columnIndex + 1}</span>
                         <Button variant="outline" onClick={() => removeFooterColumn(columnIndex)}>Remove</Button>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Title</label>
+                          <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Title</label>
                           <input
                             type="text"
                             value={column.title}
@@ -2218,7 +2235,7 @@ export const AdminDashboard: React.FC = () => {
                           />
                         </div>
                         <div>
-                          <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Order</label>
+                          <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Order</label>
                           <input
                             type="number"
                             value={column.order ?? 0}
@@ -2227,7 +2244,7 @@ export const AdminDashboard: React.FC = () => {
                           />
                         </div>
                         <div>
-                          <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Image (optional)</label>
+                          <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Image (optional)</label>
                           <div className="flex flex-col gap-2">
                             <label className="flex items-center gap-2 border border-dashed border-gray-300 dark:border-gray-700 p-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors text-xs">
                               Upload image
@@ -2257,7 +2274,7 @@ export const AdminDashboard: React.FC = () => {
                           </div>
                         </div>
                         <div className="md:col-span-2">
-                          <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Description</label>
+                          <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Description</label>
                           <textarea
                             value={column.description || ''}
                             onChange={(e) => updateFooterColumn(columnIndex, { ...column, description: e.target.value })}
@@ -2279,7 +2296,7 @@ export const AdminDashboard: React.FC = () => {
                       {column.showNewsletterForm && (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                           <div>
-                            <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Placeholder</label>
+                            <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Placeholder</label>
                             <input
                               type="text"
                               value={column.newsletterPlaceholder || ''}
@@ -2288,7 +2305,7 @@ export const AdminDashboard: React.FC = () => {
                             />
                           </div>
                           <div>
-                            <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Button Label (optional)</label>
+                            <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Button Label (optional)</label>
                             <input
                               type="text"
                               value={column.newsletterButtonLabel || ''}
@@ -2301,7 +2318,7 @@ export const AdminDashboard: React.FC = () => {
 
                       <div className="mt-6 space-y-2">
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Links</span>
+                          <span className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Links</span>
                           <button
                             onClick={() => addFooterColumnLink(columnIndex)}
                             className="text-xs uppercase tracking-widest text-black dark:text-white"
@@ -2347,16 +2364,16 @@ export const AdminDashboard: React.FC = () => {
                     </div>
                   ))}
                   {footerConfig.columns.length === 0 && (
-                    <div className="text-xs text-text-secondary dark:text-gray-500 italic">No footer columns yet.</div>
+                    <div className="text-xs text-black dark:text-gray-500 italic">No footer columns yet.</div>
                   )}
                 </div>
               </div>
 
               <div className="border border-gray-200 dark:border-gray-800 bg-white dark:bg-neutral-900 p-6 h-fit sticky top-24">
-                <h3 className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-4">Live Preview</h3>
+                <h3 className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400 mb-4">Live Preview</h3>
                 <div className="border border-gray-100 dark:border-gray-800 p-6">
                   {footerConfig.topLinks.length > 0 && (
-                    <div className="flex flex-wrap gap-4 text-[10px] uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-6">
+                    <div className="flex flex-wrap gap-4 text-[10px] uppercase tracking-widest text-black dark:text-gray-400 mb-6">
                       {[...footerConfig.topLinks]
                         .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
                         .map((link, index) => (
@@ -2388,24 +2405,24 @@ export const AdminDashboard: React.FC = () => {
                           {column.title || 'Untitled'}
                         </div>
                         {column.description && (
-                          <p className="text-xs text-text-secondary dark:text-gray-400">{column.description}</p>
+                          <p className="text-xs text-black dark:text-gray-400">{column.description}</p>
                         )}
                         {(column.links || []).length > 0 && (
-                          <div className="space-y-1 text-xs text-text-secondary dark:text-gray-400">
+                          <div className="space-y-1 text-xs text-black dark:text-gray-400">
                             {(column.links || []).map((link, linkIndex) => (
                               <div key={`footer-preview-link-${linkIndex}`}>{link.label}</div>
                             ))}
                           </div>
                         )}
                         {column.showNewsletterForm && (
-                          <div className="border border-gray-200 dark:border-gray-700 p-2 text-[10px] uppercase tracking-widest text-text-secondary dark:text-gray-400">
+                          <div className="border border-gray-200 dark:border-gray-700 p-2 text-[10px] uppercase tracking-widest text-black dark:text-gray-400">
                             Newsletter Form
                           </div>
                         )}
                       </div>
                     ))}
                   </div>
-                  <div className="flex gap-3 mt-6 text-xs uppercase tracking-widest text-text-secondary dark:text-gray-400">
+                  <div className="flex gap-3 mt-6 text-xs uppercase tracking-widest text-black dark:text-gray-400">
                     {([
                       { key: 'instagram', label: 'Instagram' },
                       { key: 'facebook', label: 'Facebook' },
@@ -2431,18 +2448,18 @@ export const AdminDashboard: React.FC = () => {
           <div className="bg-white dark:bg-neutral-900 shadow-sm border border-gray-200 dark:border-gray-800 animate-fade-in">
             <div className="p-6 border-b border-gray-100 dark:border-gray-800">
               <h2 className="text-xl font-bold tracking-tight text-black dark:text-white">Homepage Configuration</h2>
-              <p className="text-sm text-text-secondary dark:text-gray-400 mt-1">Control hero rotation and curated sections.</p>
+              <p className="text-sm text-black dark:text-gray-400 mt-1">Control hero rotation and curated sections.</p>
             </div>
             <div>
               <div className="p-6 border-b border-gray-100 dark:border-gray-800">
                 <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
                   <div>
                     <h4 className="font-bold text-sm uppercase tracking-wide mb-1 text-black dark:text-white">Hero Rotator</h4>
-                    <p className="text-xs text-text-secondary dark:text-gray-400">Add slides for the homepage hero rotation.</p>
+                    <p className="text-xs text-black dark:text-gray-400">Add slides for the homepage hero rotation.</p>
                   </div>
                   <div className="flex items-center gap-3 flex-wrap">
                     <div className="flex items-center gap-2">
-                      <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Interval (sec)</label>
+                      <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Interval (sec)</label>
                       <input
                         type="number"
                         min={2}
@@ -2453,7 +2470,7 @@ export const AdminDashboard: React.FC = () => {
                         className="w-20 border border-gray-300 dark:border-gray-700 bg-white dark:bg-black text-black dark:text-white px-2 py-1 text-xs"
                       />
                     </div>
-                    <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">
+                    <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">
                       Upload
                       <input
                         type="file"
@@ -2490,7 +2507,7 @@ export const AdminDashboard: React.FC = () => {
                           {slide.image ? (
                             <img src={slide.image} alt="Hero slide" className="w-full h-full object-cover" />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-[10px] text-text-secondary dark:text-gray-400 uppercase">No Image</div>
+                            <div className="w-full h-full flex items-center justify-center text-[10px] text-black dark:text-gray-400 uppercase">No Image</div>
                           )}
                         </div>
                         <button
@@ -2558,7 +2575,7 @@ export const AdminDashboard: React.FC = () => {
                     </div>
                   ))}
                   {heroSlides.length === 0 && (
-                    <div className="text-xs text-text-secondary dark:text-gray-500 italic">No hero slides configured yet.</div>
+                    <div className="text-xs text-black dark:text-gray-500 italic">No hero slides configured yet.</div>
                   )}
                 </div>
               </div>
@@ -2576,7 +2593,7 @@ export const AdminDashboard: React.FC = () => {
             <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <h2 className="text-xl font-bold tracking-tight text-black dark:text-white">Product Reviews & Comments</h2>
-                <p className="text-sm text-text-secondary dark:text-gray-400 mt-1">Approve, reject, edit, or create reviews.</p>
+                <p className="text-sm text-black dark:text-gray-400 mt-1">Approve, reject, edit, or create reviews.</p>
               </div>
               <div className="flex items-center gap-3">
                 <select
@@ -2815,7 +2832,7 @@ export const AdminDashboard: React.FC = () => {
           <div className="bg-white dark:bg-neutral-900 shadow-sm border border-gray-200 dark:border-gray-800 animate-fade-in">
             <div className="p-6 border-b border-gray-100 dark:border-gray-800">
               <h2 className="text-xl font-bold tracking-tight text-black dark:text-white">Payment Methods</h2>
-              <p className="text-sm text-text-secondary dark:text-gray-400 mt-1">Configure the text shown when a customer selects JazzCash or Bank Transfer at checkout.</p>
+              <p className="text-sm text-black dark:text-gray-400 mt-1">Configure the text shown when a customer selects JazzCash or Bank Transfer at checkout.</p>
             </div>
             <div className="p-6 space-y-8">
               <div>
@@ -2846,11 +2863,92 @@ export const AdminDashboard: React.FC = () => {
         )}
 
         {/* WhatsApp Tab */}
+        {activeTab === 'delivery' && (
+          <div className="bg-white dark:bg-neutral-900 shadow-sm border border-gray-200 dark:border-gray-800 animate-fade-in">
+            <div className="p-6 border-b border-gray-100 dark:border-gray-800">
+              <h2 className="text-xl font-bold tracking-tight text-black dark:text-white">Delivery Fee Settings</h2>
+              <p className="text-sm text-black dark:text-gray-400 mt-1">Configure how delivery fees are calculated at checkout.</p>
+            </div>
+            <div className="p-6 space-y-6">
+              <div>
+                <label className="block text-sm font-bold uppercase tracking-widest text-black dark:text-white mb-3">Delivery Type</label>
+                <div className="space-y-3">
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="deliveryType"
+                      value="flat"
+                      checked={deliverySettings.type === 'flat'}
+                      onChange={() => setDeliverySettings(prev => ({ ...prev, type: 'flat' }))}
+                      className="accent-black dark:accent-white"
+                    />
+                    <span className="text-sm text-black dark:text-white">Flat delivery fee on all orders</span>
+                  </label>
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="deliveryType"
+                      value="free_above_threshold"
+                      checked={deliverySettings.type === 'free_above_threshold'}
+                      onChange={() => setDeliverySettings(prev => ({ ...prev, type: 'free_above_threshold' }))}
+                      className="accent-black dark:accent-white"
+                    />
+                    <span className="text-sm text-black dark:text-white">Free delivery above a minimum order amount (flat fee below)</span>
+                  </label>
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="deliveryType"
+                      value="always_free"
+                      checked={deliverySettings.type === 'always_free'}
+                      onChange={() => setDeliverySettings(prev => ({ ...prev, type: 'always_free' }))}
+                      className="accent-black dark:accent-white"
+                    />
+                    <span className="text-sm text-black dark:text-white">Always free delivery</span>
+                  </label>
+                </div>
+              </div>
+
+              {deliverySettings.type !== 'always_free' && (
+                <div>
+                  <label className="block text-sm font-bold uppercase tracking-widest text-black dark:text-white mb-2">Flat Delivery Fee (Rs.)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={deliverySettings.flatFee}
+                    onChange={(e) => setDeliverySettings(prev => ({ ...prev, flatFee: Number(e.target.value) }))}
+                    className="w-full max-w-xs border border-gray-300 dark:border-gray-700 bg-white dark:bg-black text-black dark:text-white p-3 text-sm"
+                  />
+                </div>
+              )}
+
+              {deliverySettings.type === 'free_above_threshold' && (
+                <div>
+                  <label className="block text-sm font-bold uppercase tracking-widest text-black dark:text-white mb-2">Free Delivery Above (Rs.)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={deliverySettings.freeAboveAmount}
+                    onChange={(e) => setDeliverySettings(prev => ({ ...prev, freeAboveAmount: Number(e.target.value) }))}
+                    className="w-full max-w-xs border border-gray-300 dark:border-gray-700 bg-white dark:bg-black text-black dark:text-white p-3 text-sm"
+                  />
+                  <p className="text-xs text-black dark:text-gray-400 mt-2">Orders above this amount will have free delivery. Orders below will be charged the flat fee.</p>
+                </div>
+              )}
+
+              <Button onClick={handleSaveDeliverySettings} disabled={deliverySaving}>
+                {deliverySaving ? 'Saving...' : 'Save Delivery Settings'}
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* WhatsApp Tab */}
         {activeTab === 'whatsapp' && (
           <div className="bg-white dark:bg-neutral-900 shadow-sm border border-gray-200 dark:border-gray-800 animate-fade-in">
             <div className="p-6 border-b border-gray-100 dark:border-gray-800">
               <h2 className="text-xl font-bold tracking-tight text-black dark:text-white">WhatsApp Contact</h2>
-              <p className="text-sm text-text-secondary dark:text-gray-400 mt-1">Set the WhatsApp number that customers can reach you on via the floating icon.</p>
+              <p className="text-sm text-black dark:text-gray-400 mt-1">Set the WhatsApp number that customers can reach you on via the floating icon.</p>
             </div>
             <div className="p-6 space-y-6">
               <div>
@@ -2862,7 +2960,7 @@ export const AdminDashboard: React.FC = () => {
                   placeholder="e.g. 923001234567 (country code without +)"
                   className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-black text-black dark:text-white p-3 text-sm max-w-md"
                 />
-                <p className="text-xs text-text-secondary dark:text-gray-400 mt-2">Enter the full number with country code, without + or spaces. Example: 923001234567</p>
+                <p className="text-xs text-black dark:text-gray-400 mt-2">Enter the full number with country code, without + or spaces. Example: 923001234567</p>
               </div>
               <Button onClick={handleSaveWhatsapp} disabled={whatsappSaving}>
                 {whatsappSaving ? 'Saving...' : 'Save WhatsApp Number'}
@@ -2876,7 +2974,7 @@ export const AdminDashboard: React.FC = () => {
           <div className="bg-white dark:bg-neutral-900 shadow-sm border border-gray-200 dark:border-gray-800 animate-fade-in">
             <div className="p-6 border-b border-gray-100 dark:border-gray-800">
               <h2 className="text-xl font-bold tracking-tight text-black dark:text-white">Product Q&A</h2>
-              <p className="text-sm text-text-secondary dark:text-gray-400 mt-1">Add common questions and answers for each product. These appear on the product page.</p>
+              <p className="text-sm text-black dark:text-gray-400 mt-1">Add common questions and answers for each product. These appear on the product page.</p>
             </div>
 
             {/* Add / Edit Form */}
@@ -2886,7 +2984,7 @@ export const AdminDashboard: React.FC = () => {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Product</label>
+                  <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Product</label>
                   <select
                     value={qaEditing ? qaEditing.productId : qaForm.productId}
                     onChange={(e) => qaEditing ? setQaEditing({ ...qaEditing, productId: e.target.value }) : setQaForm(prev => ({ ...prev, productId: e.target.value }))}
@@ -2901,7 +2999,7 @@ export const AdminDashboard: React.FC = () => {
               </div>
               <div className="space-y-4 mb-4">
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Question</label>
+                  <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Question</label>
                   <input
                     type="text"
                     value={qaEditing ? qaEditing.question : qaForm.question}
@@ -2911,7 +3009,7 @@ export const AdminDashboard: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400">Answer</label>
+                  <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400">Answer</label>
                   <textarea
                     value={qaEditing ? qaEditing.answer : qaForm.answer}
                     onChange={(e) => qaEditing ? setQaEditing({ ...qaEditing, answer: e.target.value }) : setQaForm(prev => ({ ...prev, answer: e.target.value }))}
@@ -2960,21 +3058,21 @@ export const AdminDashboard: React.FC = () => {
             {/* List */}
             <div className="divide-y divide-gray-100 dark:divide-gray-800">
               {qaItems.length === 0 && (
-                <div className="p-12 text-center text-text-secondary dark:text-gray-500"><p>No Q&A items yet.</p></div>
+                <div className="p-12 text-center text-black dark:text-gray-500"><p>No Q&A items yet.</p></div>
               )}
               {qaItems.map((qa: any) => (
                 <div key={qa._id} className="p-6 flex items-start justify-between gap-4">
                   <div className="flex-grow">
-                    <p className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-1">
+                    <p className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400 mb-1">
                       {qa.productId?.name || 'Unknown Product'}
                     </p>
                     <p className="text-sm font-semibold text-black dark:text-white mb-1">{qa.question}</p>
-                    <p className="text-sm text-text-secondary dark:text-gray-400">{qa.answer}</p>
+                    <p className="text-sm text-black dark:text-gray-400">{qa.answer}</p>
                   </div>
                   <div className="flex gap-2 flex-shrink-0">
                     <button
                       onClick={() => setQaEditing({ _id: qa._id, productId: qa.productId?._id || '', question: qa.question, answer: qa.answer })}
-                      className="text-text-secondary hover:text-black dark:hover:text-white transition-colors"
+                      className="text-black hover:text-black dark:hover:text-white transition-colors"
                     >
                       <Edit2 size={14} />
                     </button>
@@ -2984,7 +3082,7 @@ export const AdminDashboard: React.FC = () => {
                         await fetch(`/api/admin/qa/${qa._id}`, { method: 'DELETE' });
                         fetchData();
                       }}
-                      className="text-text-secondary hover:text-red-500 transition-colors"
+                      className="text-black hover:text-red-500 transition-colors"
                     >
                       <Trash2 size={14} />
                     </button>

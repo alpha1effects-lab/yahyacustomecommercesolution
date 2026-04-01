@@ -301,7 +301,7 @@ export const SeoAdminPanel: React.FC = () => {
   };
 
   if (authStatus === 'loading') {
-    return <div className="flex items-center justify-center min-h-screen text-sm text-text-secondary">Loading…</div>;
+    return <div className="flex items-center justify-center min-h-screen text-sm text-black">Loading…</div>;
   }
   if (!session || (session.user as any)?.role !== 'admin') return null;
 
@@ -348,14 +348,14 @@ export const SeoAdminPanel: React.FC = () => {
           />
         </div>
         <div className="border border-gray-200 dark:border-gray-700">
-          <div className="grid grid-cols-[auto_1fr_1fr_80px] gap-4 p-3 text-xs uppercase tracking-widest text-text-secondary border-b border-gray-200 dark:border-gray-700">
+          <div className="grid grid-cols-[auto_1fr_1fr_80px] gap-4 p-3 text-xs uppercase tracking-widest text-black border-b border-gray-200 dark:border-gray-700">
             <span>SEO</span>
             <span>Name</span>
             <span>Slug</span>
             <span>Action</span>
           </div>
           {filtered.length === 0 && (
-            <div className="p-6 text-center text-sm text-text-secondary">No items found.</div>
+            <div className="p-6 text-center text-sm text-black">No items found.</div>
           )}
           {filtered.map((item) => {
             const entitySeo =
@@ -387,7 +387,7 @@ export const SeoAdminPanel: React.FC = () => {
                 <div className="grid grid-cols-[auto_1fr_1fr_80px] gap-4 p-3 items-center">
                   <StatusDot status={status} />
                   <span className="text-sm truncate">{item.name || item.title || '—'}</span>
-                  <span className="text-xs text-text-secondary truncate">{item.slug || '—'}</span>
+                  <span className="text-xs text-black truncate">{item.slug || '—'}</span>
                   <button
                     className="text-xs underline text-blue-600 dark:text-blue-400"
                     onClick={() => toggleExpand(item._id, entitySeo)}
@@ -438,7 +438,7 @@ export const SeoAdminPanel: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
         <div>
           <h1 className="text-2xl font-bold uppercase tracking-widest">SEO Panel</h1>
-          <p className="text-sm text-text-secondary">Manage SEO metadata, redirects, and indexing.</p>
+          <p className="text-sm text-black">Manage SEO metadata, redirects, and indexing.</p>
         </div>
         <div className="flex flex-wrap gap-3">
           <Link href="/admin/dashboard">
@@ -464,7 +464,7 @@ export const SeoAdminPanel: React.FC = () => {
             className={`px-4 py-2 text-xs uppercase tracking-widest transition-colors ${
               tab === t.key
                 ? 'bg-black text-white dark:bg-white dark:text-black'
-                : 'bg-gray-100 dark:bg-neutral-800 text-text-secondary hover:bg-gray-200 dark:hover:bg-neutral-700'
+                : 'bg-gray-100 dark:bg-neutral-800 text-black hover:bg-gray-200 dark:hover:bg-neutral-700'
             }`}
           >
             {t.label}
@@ -475,11 +475,11 @@ export const SeoAdminPanel: React.FC = () => {
       {/* ─── Pages Tab ─── */}
       {tab === 'pages' && (
         <div>
-          <p className="text-sm text-text-secondary mb-4">
+          <p className="text-sm text-black mb-4">
             Manage SEO for all static pages. Dynamic pages (products, blog posts, brands) are managed in their respective tabs.
           </p>
           <div className="border border-gray-200 dark:border-gray-700">
-            <div className="grid grid-cols-[auto_1fr_1fr_80px] gap-4 p-3 text-xs uppercase tracking-widest text-text-secondary border-b border-gray-200 dark:border-gray-700">
+            <div className="grid grid-cols-[auto_1fr_1fr_80px] gap-4 p-3 text-xs uppercase tracking-widest text-black border-b border-gray-200 dark:border-gray-700">
               <span>SEO</span>
               <span>Page</span>
               <span>Path</span>
@@ -493,7 +493,7 @@ export const SeoAdminPanel: React.FC = () => {
                   <div className="grid grid-cols-[auto_1fr_1fr_80px] gap-4 p-3 items-center">
                     <StatusDot status={status} />
                     <span className="text-sm truncate">{page.displayName}</span>
-                    <span className="text-xs text-text-secondary truncate">{page.pagePath}</span>
+                    <span className="text-xs text-black truncate">{page.pagePath}</span>
                     <button
                       className="text-xs underline text-blue-600 dark:text-blue-400"
                       onClick={() => {
@@ -574,7 +574,7 @@ export const SeoAdminPanel: React.FC = () => {
         <div className="space-y-6">
           {/* Add/Edit form */}
           <div className="border border-gray-200 dark:border-gray-700 p-4 space-y-3">
-            <h3 className="text-xs uppercase tracking-widest text-text-secondary mb-2">
+            <h3 className="text-xs uppercase tracking-widest text-black mb-2">
               {editingRedirectId ? 'Edit Redirect' : 'Add Redirect'}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -627,7 +627,7 @@ export const SeoAdminPanel: React.FC = () => {
 
           {/* Redirects list */}
           <div className="border border-gray-200 dark:border-gray-700">
-            <div className="grid grid-cols-[1fr_1fr_60px_60px_auto] gap-4 p-3 text-xs uppercase tracking-widest text-text-secondary border-b border-gray-200 dark:border-gray-700">
+            <div className="grid grid-cols-[1fr_1fr_60px_60px_auto] gap-4 p-3 text-xs uppercase tracking-widest text-black border-b border-gray-200 dark:border-gray-700">
               <span>From</span>
               <span>To</span>
               <span>Type</span>
@@ -635,7 +635,7 @@ export const SeoAdminPanel: React.FC = () => {
               <span>Actions</span>
             </div>
             {redirects.length === 0 && (
-              <div className="p-6 text-center text-sm text-text-secondary">No redirects configured.</div>
+              <div className="p-6 text-center text-sm text-black">No redirects configured.</div>
             )}
             {redirects.map((r) => (
               <div
@@ -674,7 +674,7 @@ export const SeoAdminPanel: React.FC = () => {
       {/* Robots.txt */}
       {tab === 'robots' && (
         <div className="space-y-4">
-          <p className="text-sm text-text-secondary">
+          <p className="text-sm text-black">
             Edit the custom robots.txt content. Pre-populated with sensible defaults.
           </p>
           <textarea
@@ -694,7 +694,7 @@ export const SeoAdminPanel: React.FC = () => {
       {tab === 'defaults' && (
         <div className="space-y-4 max-w-xl">
           <div>
-            <label className="block text-xs uppercase tracking-widest text-text-secondary mb-1">
+            <label className="block text-xs uppercase tracking-widest text-black mb-1">
               Title Suffix
             </label>
             <input
@@ -703,10 +703,10 @@ export const SeoAdminPanel: React.FC = () => {
               onChange={(e) => setDefaults({ ...defaults, titleSuffix: e.target.value })}
               placeholder="e.g. — My Store"
             />
-            <p className="text-xs text-text-secondary mt-1">Appended to page titles, e.g. &quot;Product Name — My Store&quot;</p>
+            <p className="text-xs text-black mt-1">Appended to page titles, e.g. &quot;Product Name — My Store&quot;</p>
           </div>
           <div>
-            <label className="block text-xs uppercase tracking-widest text-text-secondary mb-1">
+            <label className="block text-xs uppercase tracking-widest text-black mb-1">
               Default Description
             </label>
             <textarea
@@ -718,7 +718,7 @@ export const SeoAdminPanel: React.FC = () => {
             />
           </div>
           <div>
-            <label className="block text-xs uppercase tracking-widest text-text-secondary mb-1">
+            <label className="block text-xs uppercase tracking-widest text-black mb-1">
               Default OG Image URL
             </label>
             <input
@@ -738,19 +738,19 @@ export const SeoAdminPanel: React.FC = () => {
       {tab === 'templates' && (
         <div className="space-y-6 max-w-2xl">
           <div>
-            <p className="text-sm text-text-secondary mb-4">
+            <p className="text-sm text-black mb-4">
               Define title templates per entity type. Use placeholders like <code className="text-xs bg-gray-100 dark:bg-neutral-800 px-1 py-0.5 rounded">{'{{name}}'}</code>,{' '}
               <code className="text-xs bg-gray-100 dark:bg-neutral-800 px-1 py-0.5 rounded">{'{{title}}'}</code>,{' '}
               <code className="text-xs bg-gray-100 dark:bg-neutral-800 px-1 py-0.5 rounded">{'{{brand}}'}</code>,{' '}
               <code className="text-xs bg-gray-100 dark:bg-neutral-800 px-1 py-0.5 rounded">{'{{category}}'}</code>.
             </p>
-            <p className="text-sm text-text-secondary mb-6">
+            <p className="text-sm text-black mb-6">
               <strong>Priority:</strong> Per-page/entity SEO → Template-generated SEO → Global defaults (fallback).
             </p>
           </div>
 
           <div>
-            <label className="block text-xs uppercase tracking-widest text-text-secondary mb-1">
+            <label className="block text-xs uppercase tracking-widest text-black mb-1">
               Product Title Template
             </label>
             <input
@@ -759,13 +759,13 @@ export const SeoAdminPanel: React.FC = () => {
               onChange={(e) => setTemplates({ ...templates, product: e.target.value })}
               placeholder="{{name}} | Buy Online in Pakistan"
             />
-            <p className="text-xs text-text-secondary mt-1">
+            <p className="text-xs text-black mt-1">
               Available: {'{{name}}'}, {'{{brand}}'}, {'{{category}}'}, {'{{price}}'}
             </p>
           </div>
 
           <div>
-            <label className="block text-xs uppercase tracking-widest text-text-secondary mb-1">
+            <label className="block text-xs uppercase tracking-widest text-black mb-1">
               Category Title Template
             </label>
             <input
@@ -774,11 +774,11 @@ export const SeoAdminPanel: React.FC = () => {
               onChange={(e) => setTemplates({ ...templates, category: e.target.value })}
               placeholder="{{name}} — Shop the Best Collection"
             />
-            <p className="text-xs text-text-secondary mt-1">Available: {'{{name}}'}</p>
+            <p className="text-xs text-black mt-1">Available: {'{{name}}'}</p>
           </div>
 
           <div>
-            <label className="block text-xs uppercase tracking-widest text-text-secondary mb-1">
+            <label className="block text-xs uppercase tracking-widest text-black mb-1">
               Brand Title Template
             </label>
             <input
@@ -787,11 +787,11 @@ export const SeoAdminPanel: React.FC = () => {
               onChange={(e) => setTemplates({ ...templates, brand: e.target.value })}
               placeholder="{{name}} — Official Store"
             />
-            <p className="text-xs text-text-secondary mt-1">Available: {'{{name}}'}</p>
+            <p className="text-xs text-black mt-1">Available: {'{{name}}'}</p>
           </div>
 
           <div>
-            <label className="block text-xs uppercase tracking-widest text-text-secondary mb-1">
+            <label className="block text-xs uppercase tracking-widest text-black mb-1">
               Blog Title Template
             </label>
             <input
@@ -800,7 +800,7 @@ export const SeoAdminPanel: React.FC = () => {
               onChange={(e) => setTemplates({ ...templates, blog: e.target.value })}
               placeholder="{{title}} — Blog"
             />
-            <p className="text-xs text-text-secondary mt-1">Available: {'{{title}}'}, {'{{category}}'}</p>
+            <p className="text-xs text-black mt-1">Available: {'{{title}}'}, {'{{category}}'}</p>
           </div>
 
           <Button onClick={saveTemplates} disabled={saving}>

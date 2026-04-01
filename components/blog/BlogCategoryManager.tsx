@@ -69,7 +69,7 @@ export const BlogCategoryManager: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
         <div>
           <h1 className="text-2xl font-bold uppercase tracking-widest">Blog Categories</h1>
-          <p className="text-sm text-text-secondary">Organize blog posts by category.</p>
+          <p className="text-sm text-black">Organize blog posts by category.</p>
         </div>
         <Link href="/admin/blog">
           <Button variant="outline">Back to Blog</Button>
@@ -81,7 +81,7 @@ export const BlogCategoryManager: React.FC = () => {
       <div className="border border-gray-200 p-6 mb-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="text-xs uppercase tracking-widest text-text-secondary">Name</label>
+            <label className="text-xs uppercase tracking-widest text-black">Name</label>
             <input
               className="w-full border border-gray-300 p-3 mt-2"
               value={form.name}
@@ -89,7 +89,7 @@ export const BlogCategoryManager: React.FC = () => {
             />
           </div>
           <div>
-            <label className="text-xs uppercase tracking-widest text-text-secondary">Slug</label>
+            <label className="text-xs uppercase tracking-widest text-black">Slug</label>
             <input
               className="w-full border border-gray-300 p-3 mt-2"
               value={form.slug}
@@ -98,7 +98,7 @@ export const BlogCategoryManager: React.FC = () => {
           </div>
         </div>
         <div className="mt-4">
-          <label className="text-xs uppercase tracking-widest text-text-secondary">Description</label>
+          <label className="text-xs uppercase tracking-widest text-black">Description</label>
           <textarea
             className="w-full border border-gray-300 p-3 mt-2 min-h-[120px]"
             value={form.description}
@@ -116,7 +116,7 @@ export const BlogCategoryManager: React.FC = () => {
       </div>
 
       <div className="border border-gray-200">
-        <div className="grid grid-cols-3 gap-4 p-4 text-xs uppercase tracking-widest text-text-secondary border-b border-gray-200">
+        <div className="grid grid-cols-3 gap-4 p-4 text-xs uppercase tracking-widest text-black border-b border-gray-200">
           <span>Name</span>
           <span>Slug</span>
           <span>Actions</span>

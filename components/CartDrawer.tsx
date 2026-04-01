@@ -27,7 +27,7 @@ export const CartDrawer: React.FC = () => {
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800">
           <h2 className="text-xl font-bold tracking-widest uppercase text-black dark:text-white">Shopping Bag ({cartItems.length})</h2>
-          <button onClick={() => setIsCartOpen(false)} className="hover:text-text-secondary dark:hover:text-gray-400 text-black dark:text-white transition-colors">
+          <button onClick={() => setIsCartOpen(false)} className="hover:text-black dark:hover:text-gray-400 text-black dark:text-white transition-colors">
             <X size={24} strokeWidth={1.5} />
           </button>
         </div>
@@ -35,7 +35,7 @@ export const CartDrawer: React.FC = () => {
         {/* Items */}
         <div className="flex-grow overflow-y-auto p-6 space-y-8">
           {cartItems.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center text-text-secondary dark:text-gray-500 space-y-4">
+            <div className="h-full flex flex-col items-center justify-center text-black dark:text-gray-500 space-y-4">
               <p>Your bag is empty.</p>
               <Button variant="outline" onClick={() => setIsCartOpen(false)}>Continue Shopping</Button>
             </div>
@@ -53,7 +53,7 @@ export const CartDrawer: React.FC = () => {
                          <Trash2 size={16} />
                       </button>
                     </div>
-                    <p className="text-xs text-text-secondary dark:text-gray-400 uppercase tracking-wider mt-1">{item.brand?.name || 'Unbranded'}</p>
+                    <p className="text-xs text-black dark:text-gray-400 uppercase tracking-wider mt-1">{item.brand?.name || 'Unbranded'}</p>
                   </div>
                   
                   <div className="flex justify-between items-end">
@@ -88,7 +88,7 @@ export const CartDrawer: React.FC = () => {
               <span className="text-sm font-medium uppercase tracking-widest text-black dark:text-white">Subtotal</span>
               <span className="text-lg font-bold text-black dark:text-white">{formatPrice(subtotal)}</span>
             </div>
-            <p className="text-xs text-text-secondary dark:text-gray-400 text-center mb-4">Shipping and taxes calculated at checkout.</p>
+            <p className="text-xs text-black dark:text-gray-400 text-center mb-4">Shipping and taxes calculated at checkout.</p>
             <Button fullWidth onClick={() => { setIsCartOpen(false); router.push('/checkout'); }}>Checkout</Button>
           </div>
         )}

@@ -111,7 +111,7 @@ export const SearchOverlay: React.FC = () => {
         <div className="max-w-[1440px] mx-auto px-6 py-6">
           <div className="border border-black dark:border-white p-4 flex items-center bg-white dark:bg-black relative" onClick={(event) => event.stopPropagation()}>
             <div className="flex-grow">
-              <label htmlFor="search-main" className="block text-xs text-text-secondary dark:text-gray-400 mb-1">Search</label>
+              <label htmlFor="search-main" className="block text-xs text-black dark:text-gray-400 mb-1">Search</label>
               <input 
                 id="search-main"
                 autoFocus
@@ -155,7 +155,7 @@ export const SearchOverlay: React.FC = () => {
               
               {/* Suggestions Column */}
               <div className="md:col-span-4 lg:col-span-3 border-b md:border-b-0 md:border-r border-gray-100 dark:border-gray-800 pb-8 md:pb-0">
-                <h3 className="text-xs font-bold text-text-secondary dark:text-gray-400 uppercase tracking-widest mb-6">Suggestions</h3>
+                <h3 className="text-xs font-bold text-black dark:text-gray-400 uppercase tracking-widest mb-6">Suggestions</h3>
                 {suggestions.length > 0 ? (
                   <ul className="space-y-4">
                     {suggestions.map((s, i) => (
@@ -172,13 +172,13 @@ export const SearchOverlay: React.FC = () => {
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-sm text-text-secondary dark:text-gray-500 italic">No suggestions found.</p>
+                  <p className="text-sm text-black dark:text-gray-500 italic">No suggestions found.</p>
                 )}
               </div>
 
               {/* Products Column */}
               <div className="md:col-span-8 lg:col-span-9 pl-0 md:pl-8">
-                <h3 className="text-xs font-bold text-text-secondary dark:text-gray-400 uppercase tracking-widest mb-6">Products</h3>
+                <h3 className="text-xs font-bold text-black dark:text-gray-400 uppercase tracking-widest mb-6">Products</h3>
                 {products.length > 0 ? (
                   <div className="space-y-6">
                     {products.map(product => (
@@ -194,20 +194,20 @@ export const SearchOverlay: React.FC = () => {
                           <h4 className="font-medium text-lg text-black dark:text-white underline underline-offset-4 decoration-1 decoration-transparent group-hover:decoration-black dark:group-hover:decoration-white transition-all">
                             {product.name}
                           </h4>
-                          <p className="text-sm text-text-secondary dark:text-gray-400 mt-1 uppercase tracking-wider text-[10px]">{product.brand?.name || 'Studio'}</p>
+                          <p className="text-sm text-black dark:text-gray-400 mt-1 uppercase tracking-wider text-[10px]">{product.brand?.name || 'Studio'}</p>
                           <p className="text-sm font-medium mt-1 text-gray-900 dark:text-gray-200">PKR {Number(product.price || 0).toFixed(2)}</p>
                         </div>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-sm text-text-secondary dark:text-gray-500 italic">No products found matching &quot;{query}&quot;.</p>
+                  <p className="text-sm text-black dark:text-gray-500 italic">No products found matching &quot;{query}&quot;.</p>
                 )}
               </div>
             </div>
           ) : (
             <div className="animate-fade-in">
-              <h3 className="text-xs font-bold text-text-secondary dark:text-gray-400 uppercase tracking-widest mb-6">Products For You</h3>
+              <h3 className="text-xs font-bold text-black dark:text-gray-400 uppercase tracking-widest mb-6">Products For You</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {allProducts.slice(0, 4).map(product => (
                   <div 
@@ -222,14 +222,14 @@ export const SearchOverlay: React.FC = () => {
                       <h4 className="font-medium text-base text-black dark:text-white group-hover:underline underline-offset-4 decoration-1">
                         {product.name}
                       </h4>
-                      <p className="text-xs text-text-secondary dark:text-gray-400 mt-1 uppercase tracking-wider">{product.brand?.name || 'Studio'}</p>
+                      <p className="text-xs text-black dark:text-gray-400 mt-1 uppercase tracking-wider">{product.brand?.name || 'Studio'}</p>
                       <p className="text-sm font-medium mt-1 text-gray-900 dark:text-gray-200">PKR {Number(product.price || 0).toFixed(2)}</p>
                     </div>
                   </div>
                 ))}
               </div>
               {query.length > 0 && (
-                <div className="mt-12 pt-8 border-t border-gray-100 dark:border-gray-800 text-center text-text-secondary dark:text-gray-500">
+                <div className="mt-12 pt-8 border-t border-gray-100 dark:border-gray-800 text-center text-black dark:text-gray-500">
                   <p>Type at least 3 characters to search entire catalog...</p>
                 </div>
               )}
@@ -248,7 +248,7 @@ export const SearchOverlay: React.FC = () => {
             >
               Search for &quot;{query}&quot; <ArrowRight size={20} />
             </button>
-            <button onClick={onClose} className="text-sm text-text-secondary dark:text-gray-400 hover:text-black dark:hover:text-white underline underline-offset-4">
+            <button onClick={onClose} className="text-sm text-black dark:text-gray-400 hover:text-black dark:hover:text-white underline underline-offset-4">
               Close
             </button>
           </div>

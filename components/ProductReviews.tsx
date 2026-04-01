@@ -137,7 +137,7 @@ export default function ProductReviews({ productId, productSlug }: ProductReview
 
   return (
     <section className="max-w-[1440px] mx-auto px-6 py-16">
-      <h2 className="text-xl font-bold tracking-[0.15em] uppercase text-black dark:text-white mb-8">
+      <h2 className="text-2xl md:text-3xl font-bold tracking-[0.15em] uppercase text-black dark:text-white mb-8">
         What Other People Say About {productSlug.replace(/-/g, ' ')}
       </h2>
 

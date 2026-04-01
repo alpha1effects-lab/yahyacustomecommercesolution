@@ -71,6 +71,7 @@ export async function PUT(request: Request) {
   if (body.footer) settings.footer = body.footer;
   if (body.whatsappNumber !== undefined) settings.whatsappNumber = body.whatsappNumber;
   if (body.paymentMethodTexts !== undefined) settings.paymentMethodTexts = body.paymentMethodTexts;
+  if (body.deliverySettings !== undefined) settings.deliverySettings = body.deliverySettings;
 
   await settings.save();
   return NextResponse.json(settings);

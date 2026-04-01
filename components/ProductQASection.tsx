@@ -33,7 +33,7 @@ const ProductQASection: React.FC<ProductQASectionProps> = ({ productId, productN
         <h2 className="text-xl font-bold tracking-[0.15em] uppercase text-black dark:text-white mb-8">
           FAQ
         </h2>
-        <p className="text-text-secondary dark:text-gray-400 text-sm md:text-base">
+        <p className="text-black dark:text-gray-400 text-sm md:text-base">
           Frequently asked questions about {productName}
         </p>
       </div>
@@ -51,7 +51,7 @@ const ProductQASection: React.FC<ProductQASectionProps> = ({ productId, productN
               />
             </button>
             {expanded[qa._id] && (
-              <div className="pb-5 text-sm text-text-secondary dark:text-gray-400 leading-relaxed">
+              <div className="pb-5 text-sm text-black dark:text-gray-400 leading-relaxed">
                 {qa.answer}
               </div>
             )}

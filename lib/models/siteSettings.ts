@@ -64,6 +64,11 @@ export interface ISiteSettings extends Document {
     bankTransfer?: string;
   };
   robotsTxt?: string;
+  deliverySettings?: {
+    type: 'flat' | 'free_above_threshold' | 'always_free';
+    flatFee: number;
+    freeAboveAmount: number;
+  };
   defaultSeo?: {
     titleSuffix?: string;
     defaultDescription?: string;
@@ -211,6 +216,15 @@ const siteSettingsSchema = new Schema<ISiteSettings>({
     bankTransfer: { type: String, default: '' },
   },
   robotsTxt: { type: String, default: '' },
+  deliverySettings: {
+    type: {
+      type: String,
+      enum: ['flat', 'free_above_threshold', 'always_free'],
+      default: 'flat',
+    },
+    flatFee: { type: Number, default: 0 },
+    freeAboveAmount: { type: Number, default: 0 },
+  },
   defaultSeo: {
     titleSuffix: { type: String, default: '' },
     defaultDescription: { type: String, default: '' },

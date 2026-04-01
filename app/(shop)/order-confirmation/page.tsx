@@ -49,7 +49,7 @@ export default function OrderConfirmationPage() {
           </svg>
         </div>
         <h1 className="text-4xl font-bold tracking-widest uppercase mb-3 text-black dark:text-white">Thank You!</h1>
-        <p className="text-text-secondary dark:text-gray-400 max-w-md">
+        <p className="text-black dark:text-gray-400 max-w-md">
           Your order has been placed successfully.
         </p>
       </div>
@@ -58,12 +58,12 @@ export default function OrderConfirmationPage() {
         <div className="border border-gray-200 dark:border-gray-800 bg-white dark:bg-neutral-900 divide-y divide-gray-100 dark:divide-gray-800">
           {/* Order ID */}
           <div className="p-6">
-            <p className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-2">Order ID</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400 mb-2">Order ID</p>
             <div className="flex items-center gap-3">
               <span className="text-lg font-bold text-black dark:text-white tracking-wide">{order.orderNumber}</span>
               <button
                 onClick={handleCopy}
-                className="text-text-secondary hover:text-black dark:hover:text-white transition-colors"
+                className="text-black hover:text-black dark:hover:text-white transition-colors"
                 title="Copy Order ID"
               >
                 {copied ? <Check size={16} className="text-green-500" /> : <Copy size={16} />}
@@ -74,30 +74,30 @@ export default function OrderConfirmationPage() {
           {/* Customer Info */}
           <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-1">Name</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400 mb-1">Name</p>
               <p className="text-sm text-black dark:text-white">{order.fullName}</p>
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-1">Email</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400 mb-1">Email</p>
               <p className="text-sm text-black dark:text-white">{order.email}</p>
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-1">Phone</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400 mb-1">Phone</p>
               <p className="text-sm text-black dark:text-white">{order.phone}</p>
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-1">Payment</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400 mb-1">Payment</p>
               <p className="text-sm text-black dark:text-white">{order.paymentMethod}</p>
             </div>
             <div className="md:col-span-2">
-              <p className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-1">Shipping Address</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400 mb-1">Shipping Address</p>
               <p className="text-sm text-black dark:text-white">{order.address}, {order.city}{order.postalCode ? `, ${order.postalCode}` : ''}</p>
             </div>
           </div>
 
           {/* Items */}
           <div className="p-6">
-            <p className="text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-gray-400 mb-3">Items</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-black dark:text-gray-400 mb-3">Items</p>
             <div className="space-y-3">
               {order.items.map((item, idx) => (
                 <div key={idx} className="flex items-center gap-3 text-sm">
@@ -106,7 +106,7 @@ export default function OrderConfirmationPage() {
                   )}
                   <div className="flex-grow">
                     <span className="text-black dark:text-white">{item.name}</span>
-                    <span className="text-text-secondary dark:text-gray-400 ml-2">x{item.quantity}</span>
+                    <span className="text-black dark:text-gray-400 ml-2">x{item.quantity}</span>
                   </div>
                   <span className="text-black dark:text-white">Rs. {(item.price * item.quantity).toLocaleString()}</span>
                 </div>
@@ -116,8 +116,8 @@ export default function OrderConfirmationPage() {
 
           {/* Totals */}
           <div className="p-6 space-y-2 text-sm">
-            <div className="flex justify-between"><span className="text-text-secondary dark:text-gray-400">Subtotal</span><span className="text-black dark:text-white">Rs. {order.subtotal.toLocaleString()}</span></div>
-            <div className="flex justify-between"><span className="text-text-secondary dark:text-gray-400">Delivery</span><span className="text-black dark:text-white">{order.deliveryFee === 0 ? 'Free' : `Rs. ${order.deliveryFee.toLocaleString()}`}</span></div>
+            <div className="flex justify-between"><span className="text-black dark:text-gray-400">Subtotal</span><span className="text-black dark:text-white">Rs. {order.subtotal.toLocaleString()}</span></div>
+            <div className="flex justify-between"><span className="text-black dark:text-gray-400">Delivery</span><span className="text-black dark:text-white">{order.deliveryFee === 0 ? 'Free' : `Rs. ${order.deliveryFee.toLocaleString()}`}</span></div>
             <div className="flex justify-between font-bold text-base border-t border-gray-200 dark:border-gray-700 pt-2">
               <span className="text-black dark:text-white">Total</span>
               <span className="text-black dark:text-white">Rs. {order.total.toLocaleString()}</span>

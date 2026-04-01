@@ -73,7 +73,7 @@ export const ProductSelectorModal: React.FC<ProductSelectorModalProps> = ({
               </div>
               <div>
                 <h4 className="font-bold text-sm text-black dark:text-white">{product.name}</h4>
-                <p className="text-xs text-text-secondary dark:text-gray-400">{product.brand?.name || 'Unbranded'} &bull; {formatPrice(product.price)}</p>
+                <p className="text-xs text-black dark:text-gray-400">{product.brand?.name || 'Unbranded'} &bull; {formatPrice(product.price)}</p>
               </div>
               <div className="ml-auto opacity-0 group-hover:opacity-100 text-xs font-bold uppercase tracking-widest bg-black dark:bg-white text-white dark:text-black px-2 py-1">
                 Select
@@ -82,7 +82,7 @@ export const ProductSelectorModal: React.FC<ProductSelectorModalProps> = ({
           ))}
           
           {filteredProducts.length === 0 && (
-            <div className="text-center py-8 text-text-secondary dark:text-gray-500 text-sm">
+            <div className="text-center py-8 text-black dark:text-gray-500 text-sm">
               {query ? 'No matching products found.' : 'No available products to add.'}
             </div>
           )}

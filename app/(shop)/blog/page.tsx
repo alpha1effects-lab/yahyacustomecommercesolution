@@ -48,7 +48,7 @@ export default async function BlogListPage({
     <div className="max-w-6xl mx-auto px-6 py-12">
       <div className="mb-10">
         <h1 className="text-3xl font-bold uppercase tracking-widest">Blog</h1>
-        <p className="text-sm text-text-secondary">News, tips, and guides from our blog.</p>
+        <p className="text-sm text-black">News, tips, and guides from our blog.</p>
       </div>
 
       <div className="flex flex-wrap gap-3 mb-8 text-xs uppercase tracking-widest">
@@ -82,17 +82,17 @@ export default async function BlogListPage({
                   <img src={post.featuredImage} alt={post.title} className="w-full h-52 object-cover mb-4" />
                 </Link>
               )}
-              <div className="text-xs uppercase tracking-widest text-text-secondary mb-2">
+              <div className="text-xs uppercase tracking-widest text-black mb-2">
                 {category?.name || 'Uncategorized'}
               </div>
               <h2 className="text-xl font-semibold mb-2">
                 <Link href={`/blog/${post.slug}`}>{post.title}</Link>
               </h2>
-              <div className="text-xs text-text-secondary mb-4">
+              <div className="text-xs text-black mb-4">
                 {formatDate(post.publishedAt)}
                 {post.readingTimeMinutes ? ` • ${post.readingTimeMinutes} min read` : ''}
               </div>
-              <p className="text-sm text-text-secondary">{post.excerpt}</p>
+              <p className="text-sm text-black">{post.excerpt}</p>
             </article>
           );
         })}
